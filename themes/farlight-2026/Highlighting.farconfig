@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Default Highlighting for the FarLight 2026 family — file-color rules used
+  by Far when rendering names in the panel.
+
+  Truecolor RGB so the colors stay correct regardless of the Windows Terminal
+  scheme. Six groups in the standard order: Hidden, System, Directory,
+  Executable, Archive, Temporary. Colors picked to be distinct on a #FFFFFF
+  background and to harmonize with the Light Modern palette.
+
+  Same Default Highlighting works for all three Light variants
+  (FarLight2026 / FarLight2026Acrylic / FarLight2026FullAcrylic) — it's the
+  file-name palette, not the surface palette.
+
+  Install as 'FarLight2026.farconfig' inside Addons\Colors\Default Highlighting\
+  (or rename to match whichever Light variant you installed).
+-->
+<farconfig>
+  <highlight>
+    <hierarchicalconfig>
+      <key name="Highlight">
+        <key name="Group0">
+          <!-- Hidden files -->
+          <value name="UseMask" type="qword" value="0000000000000000"/>
+          <value name="UseAttr" type="qword" value="0000000000000001"/>
+          <value name="AttrSet" type="qword" value="0000000000000002"/>
+
+          <value name="NormalColor"         type="color" background="00000000" foreground="FF9E9E9E" flags="inherit"/>
+          <value name="CursorColor"         type="color" background="00000000" foreground="FF9E9E9E" flags="inherit"/>
+          <value name="SelectedColor"       type="color" background="00000000" foreground="FFA1260D" flags="inherit"/>
+          <value name="SelectedCursorColor" type="color" background="00000000" foreground="FFA1260D" flags="inherit"/>
+        </key>
+        <key name="Group1">
+          <!-- System files -->
+          <value name="UseMask" type="qword" value="0000000000000000"/>
+          <value name="UseAttr" type="qword" value="0000000000000001"/>
+          <value name="AttrSet" type="qword" value="0000000000000004"/>
+
+          <value name="NormalColor"         type="color" background="00000000" foreground="FF6E6E6E" flags="inherit"/>
+          <value name="CursorColor"         type="color" background="00000000" foreground="FF6E6E6E" flags="inherit"/>
+          <value name="SelectedColor"       type="color" background="00000000" foreground="FFA1260D" flags="inherit"/>
+          <value name="SelectedCursorColor" type="color" background="00000000" foreground="FFA1260D" flags="inherit"/>
+        </key>
+        <key name="Group2">
+          <!-- Directories -->
+          <value name="UseMask" type="qword" value="0000000000000000"/>
+          <value name="UseAttr" type="qword" value="0000000000000001"/>
+          <value name="AttrSet" type="qword" value="0000000000000010"/>
+
+          <value name="NormalColor"         type="color" background="00000000" foreground="FF005FB8" flags="inherit"/>
+          <value name="CursorColor"         type="color" background="00000000" foreground="FF005FB8" flags="inherit"/>
+          <value name="SelectedColor"       type="color" background="00000000" foreground="FFA1260D" flags="inherit"/>
+          <value name="SelectedCursorColor" type="color" background="00000000" foreground="FFA1260D" flags="inherit"/>
+        </key>
+        <key name="Group3">
+          <!-- Executable files -->
+          <value name="Mask" type="text" value="&lt;exec&gt;"/>
+
+          <value name="NormalColor"         type="color" background="00000000" foreground="FF098658" flags="inherit"/>
+          <value name="CursorColor"         type="color" background="00000000" foreground="FF098658" flags="inherit"/>
+          <value name="SelectedColor"       type="color" background="00000000" foreground="FFA1260D" flags="inherit"/>
+          <value name="SelectedCursorColor" type="color" background="00000000" foreground="FFA1260D" flags="inherit"/>
+        </key>
+        <key name="Group4">
+          <!-- Archive files -->
+          <value name="Mask" type="text" value="&lt;arc&gt;"/>
+
+          <value name="NormalColor"         type="color" background="00000000" foreground="FFA626A4" flags="inherit"/>
+          <value name="CursorColor"         type="color" background="00000000" foreground="FFA626A4" flags="inherit"/>
+          <value name="SelectedColor"       type="color" background="00000000" foreground="FFA1260D" flags="inherit"/>
+          <value name="SelectedCursorColor" type="color" background="00000000" foreground="FFA1260D" flags="inherit"/>
+        </key>
+        <key name="Group5">
+          <!-- Temporary files -->
+          <value name="Mask" type="text" value="&lt;temp&gt;"/>
+
+          <value name="NormalColor"         type="color" background="00000000" foreground="FFC2884B" flags="inherit"/>
+          <value name="CursorColor"         type="color" background="00000000" foreground="FFC2884B" flags="inherit"/>
+          <value name="SelectedColor"       type="color" background="00000000" foreground="FFA1260D" flags="inherit"/>
+          <value name="SelectedCursorColor" type="color" background="00000000" foreground="FFA1260D" flags="inherit"/>
+        </key>
+      </key>
+    </hierarchicalconfig>
+  </highlight>
+</farconfig>

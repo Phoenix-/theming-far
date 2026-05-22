@@ -1,0 +1,17 @@
+# OS junk
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# Editor noise
+.vs/
+.vscode/
+*.swp
+*~
+
+# Far / PowerShell session leftovers
+*.bak
+*.tmp
+
+# Local user previews / drafts that aren't ready to ship
+themes/**/*.draft.*

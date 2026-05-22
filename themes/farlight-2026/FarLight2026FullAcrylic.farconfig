@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  FarLight 2026 Full Acrylic - same Light Modern palette, but every "white"
+  background (Panel, Editor, Viewer, Menu, Dialog, Help, HMenu) is replaced
+  with the WinTerm scheme-default sentinel (0x80 + bgindex flag), enabling
+  acrylic blur on all those surfaces.
+
+  Accent backgrounds (selection, status bar, warn dialog, highlights) stay
+  as truecolor RGB - those should remain visually loud, not transparent.
+
+  Foreground colors are unchanged truecolor RGB - readable on a light WinTerm
+  scheme. Switching to a dark WinTerm scheme will make text unreadable; in
+  that case use FarDark2026FullAcrylic instead.
+
+  See docs/04-acrylic-trick.md for the 0x80 sentinel mechanism.
+  Author: Phoenix- (github.com/Phoenix-)
+  Target: Far Manager 3.0 build 5400+ inside Windows Terminal with useAcrylic.
+-->
+<farconfig version="3.0">
+    <colors>
+        <!-- Top-line clock -->
+        <object name="Clock" background="FFDDDDDD" foreground="FF3B3B3B" flags="inherit"/>
+
+        <!-- Command line (above key bar) -->
+        <object name="CommandLine"              background="FF800000" foreground="FF3B3B3B" flags="bgindex inherit"/>
+        <object name="CommandLine.Prefix"       background="FF800000" foreground="FF005FB8" flags="bgindex inherit"/>
+        <object name="CommandLine.Selected"     background="FFADD6FF" foreground="FF3B3B3B" flags="inherit"/>
+        <object name="CommandLine.UserScreen"   background="FF800000" foreground="FF3B3B3B" flags="bgindex inherit"/>
+
+        <!-- Custom palette slots used by some macros/plugins (kept neutral) -->
+        <object name="CustomColor0"  background="FFFFFFFF"/>
+        <object name="CustomColor1"  background="FF3B3B3B"/>
+        <object name="CustomColor2"  background="FF616161"/>
+        <object name="CustomColor3"  background="FFE5E5E5"/>
+        <object name="CustomColor4"  background="FF005FB8"/>
+        <object name="CustomColor5"  background="FFADD6FF"/>
+        <object name="CustomColor6"  background="FFFFE082"/>
+        <object name="CustomColor7"  background="FFA1260D"/>
+        <object name="CustomColor8"  background="FFF8F8F8"/>
+        <object name="CustomColor9"  background="FFE8E8E8"/>
+        <object name="CustomColor10" background="FFDDDDDD"/>
+        <object name="CustomColor11" background="FFFFFFFF"/>
+        <object name="CustomColor12" background="FFFFFFFF"/>
+        <object name="CustomColor13" background="FFFFFFFF"/>
+        <object name="CustomColor14" background="FFFFFFFF"/>
+        <object name="CustomColor15" background="FFFFFFFF"/>
+
+        <!-- Regular dialogs -->
+        <object name="Dialog.Box"                                background="FFF8F8F8" foreground="FF3B3B3B" flags="inherit"/>
+        <object name="Dialog.Box.Title"                          background="FFF8F8F8" foreground="FF3B3B3B" flags="inherit"/>
+        <object name="Dialog.Box.Title.Highlight"                background="FFF8F8F8" foreground="FF005FB8" flags="inherit"/>
+        <object name="Dialog.Text"                               background="FFF8F8F8" foreground="FF3B3B3B" flags="inherit"/>
+        <object name="Dialog.Text.Highlight"                     background="FFF8F8F8" foreground="FF005FB8" flags="inherit"/>
+        <object name="Dialog.Disabled"                           background="FFF8F8F8" foreground="FFA0A0A0" flags="inherit"/>
+
+        <object name="Dialog.Button"                             background="FFF8F8F8" foreground="FF3B3B3B" flags="inherit"/>
+        <object name="Dialog.Button.Highlight"                   background="FFF8F8F8" foreground="FF005FB8" flags="inherit"/>
+        <object name="Dialog.Button.Selected"                    background="FF005FB8" foreground="FFFFFFFF" flags="inherit"/>
+        <object name="Dialog.Button.Highlight.Selected"          background="FF005FB8" foreground="FFADD6FF" flags="inherit"/>
+        <object name="Dialog.DefaultButton"                      background="FFE5E5E5" foreground="FF3B3B3B" flags="inherit"/>
+        <object name="Dialog.DefaultButton.Highlight"            background="FFE5E5E5" foreground="FF005FB8" flags="inherit"/>
+        <object name="Dialog.DefaultButton.Selected"             background="FF005FB8" foreground="FFFFFFFF" flags="inherit"/>
+        <object name="Dialog.DefaultButton.Highlight.Selected"   background="FF005FB8" foreground="FFADD6FF" flags="inherit"/>
+
+        <object name="Dialog.Edit"                               background="FF800000" foreground="FF3B3B3B" flags="bgindex inherit"/>
+        <object name="Dialog.Edit.Selected"                      background="FFADD6FF" foreground="FF3B3B3B" flags="inherit"/>
+        <object name="Dialog.Edit.Unchanged"                     background="FF800000" foreground="FF616161" flags="bgindex inherit"/>
+        <object name="Dialog.Edit.Disabled"                      background="FF800000" foreground="FFA0A0A0" flags="bgindex inherit"/>
+
+        <object name="Dialog.List.Box"                           background="FF800000" foreground="FF3B3B3B" flags="bgindex inherit"/>
+        <object name="Dialog.List.Title"                         background="FF800000" foreground="FF616161" flags="bgindex inherit"/>
+        <object name="Dialog.List.Text"                          background="FF800000" foreground="FF3B3B3B" flags="bgindex inherit"/>
+        <object name="Dialog.List.Text.Selected"                 background="FF0060C0" foreground="FFFFFFFF" flags="inherit"/>
+        <object name="Dialog.List.Highlight"                     background="FF800000" foreground="FF005FB8" flags="bgindex inherit"/>
+        <object name="Dialog.List.Highlight.Selected"            background="FF0060C0" foreground="FFADD6FF" flags="inherit"/>
+        <object name="Dialog.List.GrayText"                      background="FF800000" foreground="FFA0A0A0" flags="bgindex inherit"/>
+        <object name="Dialog.List.GrayText.Selected"             background="FF0060C0" foreground="FFD0D0D0" flags="inherit"/>
+        <object name="Dialog.List.Disabled"                      background="FF800000" foreground="FFA0A0A0" flags="bgindex inherit"/>
+        <object name="Dialog.List.Arrows"                        background="FF800000" foreground="FF005FB8" flags="bgindex inherit"/>
+        <object name="Dialog.List.Arrows.Disabled"               background="FF800000" foreground="FFA0A0A0" flags="bgindex inherit"/>
+        <object name="Dialog.List.Arrows.Selected"               background="FF0060C0" foreground="FFFFFFFF" flags="inherit"/>
+        <object name="Dialog.List.Scrollbar"                     background="FFE5E5E5" foreground="FF616161" flags="inherit"/>
+
+        <object name="Dialog.Combo.Box"                          background="FF800000" foreground="FF3B3B3B" flags="bgindex inherit"/>
+        <object name="Dialog.Combo.Title"                        background="FF800000" foreground="FF616161" flags="bgindex inherit"/>
+        <object name="Dialog.Combo.Text"                         background="FF800000" foreground="FF3B3B3B" flags="bgindex inherit"/>
+        <object name="Dialog.Combo.Text.Selected"                background="FF0060C0" foreground="FFFFFFFF" flags="inherit"/>
+        <object name="Dialog.Combo.Highlight"                    background="FF800000" foreground="FF005FB8" flags="bgindex inherit"/>
+        <object name="Dialog.Combo.Highlight.Selected"           background="FF0060C0" foreground="FFADD6FF" flags="inherit"/>
+        <object name="Dialog.Combo.GrayText"                     background="FF800000" foreground="FFA0A0A0" flags="bgindex inherit"/>
+        <object name="Dialog.Combo.GrayText.Selected"            background="FF0060C0" foreground="FFD0D0D0" flags="inherit"/>
+        <object name="Dialog.Combo.Disabled"                     background="FF800000" foreground="FFA0A0A0" flags="bgindex inherit"/>
+        <object name="Dialog.Combo.Arrows"                       background="FF800000" foreground="FF005FB8" flags="bgindex inherit"/>
+        <object name="Dialog.Combo.Arrows.Disabled"              background="FF800000" foreground="FFA0A0A0" flags="bgindex inherit"/>
+        <object name="Dialog.Combo.Arrows.Selected"              background="FF0060C0" foreground="FFFFFFFF" flags="inherit"/>
+        <object name="Dialog.Combo.Scrollbar"                    background="FFE5E5E5" foreground="FF616161" flags="inherit"/>
+
+        <!-- Editor -->
+        <object name="Editor.Text"           background="FF800000" foreground="FF3B3B3B" flags="bgindex inherit"/>
+        <object name="Editor.Text.Selected"  background="FFADD6FF" foreground="FF3B3B3B" flags="inherit"/>
+        <object name="Editor.Status"         background="FF005FB8" foreground="FFFFFFFF" flags="inherit"/>
+        <object name="Editor.Scrollbar"      background="FFF8F8F8" foreground="FF616161" flags="inherit"/>
+        <object name="Editor.Clock"          background="FF005FB8" foreground="FFFFFFFF" flags="inherit"/>
+
+        <!-- Horizontal main menu (top of screen) -->
+        <object name="HMenu.Text"            background="FFDDDDDD" foreground="FF3B3B3B" flags="inherit"/>
+        <object name="HMenu.Highlight"       background="FFDDDDDD" foreground="FF005FB8" flags="inherit"/>
+        <object name="HMenu.Text.Selected"   background="FF005FB8" foreground="FFFFFFFF" flags="inherit"/>
+        <object name="HMenu.Highlight.Selected" background="FF005FB8" foreground="FFADD6FF" flags="inherit"/>
+
+        <!-- Drop-down menus -->
+        <object name="Menu.Box"              background="FF800000" foreground="FF3B3B3B" flags="bgindex inherit"/>
+        <object name="Menu.Title"            background="FF800000" foreground="FF616161" flags="bgindex inherit"/>
+        <object name="Menu.Text"             background="FF800000" foreground="FF3B3B3B" flags="bgindex inherit"/>
+        <object name="Menu.Text.Selected"    background="FF0060C0" foreground="FFFFFFFF" flags="inherit"/>
+        <object name="Menu.Text.Disabled"    background="FF800000" foreground="FFA0A0A0" flags="bgindex inherit"/>
+        <object name="Menu.Highlight"        background="FF800000" foreground="FF005FB8" flags="bgindex inherit"/>
+        <object name="Menu.Highlight.Selected" background="FF0060C0" foreground="FFADD6FF" flags="inherit"/>
+        <object name="Menu.GrayText"         background="FF800000" foreground="FFA0A0A0" flags="bgindex inherit"/>
+        <object name="Menu.GrayText.Selected" background="FF0060C0" foreground="FFD0D0D0" flags="inherit"/>
+        <object name="Menu.Arrows"           background="FF800000" foreground="FF005FB8" flags="bgindex inherit"/>
+        <object name="Menu.Arrows.Disabled"  background="FF800000" foreground="FFA0A0A0" flags="bgindex inherit"/>
+        <object name="Menu.Arrows.Selected"  background="FF0060C0" foreground="FFFFFFFF" flags="inherit"/>
+        <object name="Menu.Scrollbar"        background="FFE5E5E5" foreground="FF616161" flags="inherit"/>
+
+        <!-- Help viewer -->
+        <object name="Help.Box"              background="FF800000" foreground="FF3B3B3B" flags="bgindex inherit"/>
+        <object name="Help.Box.Title"        background="FF800000" foreground="FF616161" flags="bgindex inherit"/>
+        <object name="Help.Text"             background="FF800000" foreground="FF3B3B3B" flags="bgindex inherit"/>
+        <object name="Help.Text.Highlight"   background="FF800000" foreground="FFA1260D" flags="bgindex inherit"/>
+        <object name="Help.Topic"            background="FF800000" foreground="FF005FB8" flags="bgindex inherit"/>
+        <object name="Help.Topic.Selected"   background="FF0060C0" foreground="FFFFFFFF" flags="inherit"/>
+        <object name="Help.Scrollbar"        background="FFE5E5E5" foreground="FF616161" flags="inherit"/>
+
+        <!-- Key bar (bottom F1..F12 strip) -->
+        <object name="Keybar.Background"     background="FFF8F8F8" foreground="FFF8F8F8" flags="inherit"/>
+        <object name="Keybar.Num"            background="FFF8F8F8" foreground="FF7E7E7E" flags="inherit"/>
+        <object name="Keybar.Text"           background="FFF8F8F8" foreground="FF3B3B3B" flags="inherit"/>
+
+        <!-- Panels -->
+        <object name="Panel.Text"              background="FF800000" foreground="FF3B3B3B" flags="bgindex inherit"/>
+        <object name="Panel.Text.Selected"     background="FF800000" foreground="FFA1260D" flags="bgindex inherit"/>
+        <object name="Panel.Text.Highlight"    background="FF800000" foreground="FF005FB8" flags="bgindex inherit"/>
+        <object name="Panel.Text.Info"         background="FF800000" foreground="FF616161" flags="bgindex inherit"/>
+        <object name="Panel.Cursor"            background="FFE8E8E8" foreground="FF3B3B3B" flags="inherit"/>
+        <object name="Panel.Cursor.Selected"   background="FFE8E8E8" foreground="FFA1260D" flags="inherit"/>
+        <object name="Panel.Title"             background="FF800000" foreground="FF616161" flags="bgindex inherit"/>
+        <object name="Panel.Title.Selected"    background="FF005FB8" foreground="FFFFFFFF" flags="inherit"/>
+        <object name="Panel.Title.Column"      background="FF800000" foreground="FF005FB8" flags="bgindex inherit"/>
+        <object name="Panel.Box"               background="FF800000" foreground="FFE5E5E5" flags="bgindex inherit"/>
+        <object name="Panel.DragText"          background="FFADD6FF" foreground="FF005FB8" flags="inherit"/>
+        <object name="Panel.Info.Total"        background="FF800000" foreground="FF3B3B3B" flags="bgindex inherit"/>
+        <object name="Panel.Info.Selected"     background="FF800000" foreground="FFA1260D" flags="bgindex inherit"/>
+        <object name="Panel.ScreensNumber"     background="FF800000" foreground="FF005FB8" flags="bgindex inherit"/>
+        <object name="Panel.Scrollbar"         background="FFE5E5E5" foreground="FF616161" flags="inherit"/>
+
+        <!-- Viewer -->
+        <object name="Viewer.Text"             background="FF800000" foreground="FF3B3B3B" flags="bgindex inherit"/>
+        <object name="Viewer.Text.Selected"    background="FFADD6FF" foreground="FF3B3B3B" flags="inherit"/>
+        <object name="Viewer.Status"           background="FF005FB8" foreground="FFFFFFFF" flags="inherit"/>
+        <object name="Viewer.Scrollbar"        background="FFE5E5E5" foreground="FF616161" flags="inherit"/>
+        <object name="Viewer.Arrows"           background="FF800000" foreground="FF005FB8" flags="bgindex inherit"/>
+        <object name="Viewer.Clock"            background="FF005FB8" foreground="FFFFFFFF" flags="inherit"/>
+
+        <!-- Warning/Error dialogs (red surface to read against light bg) -->
+        <object name="WarnDialog.Box"                              background="FFA1260D" foreground="FFFFFFFF" flags="inherit"/>
+        <object name="WarnDialog.Box.Title"                        background="FFA1260D" foreground="FFFFFFFF" flags="inherit"/>
+        <object name="WarnDialog.Box.Title.Highlight"              background="FFA1260D" foreground="FFFFE082" flags="inherit"/>
+        <object name="WarnDialog.Text"                             background="FFA1260D" foreground="FFFFFFFF" flags="inherit"/>
+        <object name="WarnDialog.Text.Highlight"                   background="FFA1260D" foreground="FFFFE082" flags="inherit"/>
+        <object name="WarnDialog.Disabled"                         background="FFA1260D" foreground="FFD0A0A0" flags="inherit"/>
+
+        <object name="WarnDialog.Button"                           background="FFA1260D" foreground="FFFFFFFF" flags="inherit"/>
+        <object name="WarnDialog.Button.Highlight"                 background="FFA1260D" foreground="FFFFE082" flags="inherit"/>
+        <object name="WarnDialog.Button.Selected"                  background="FF800000" foreground="FFA1260D" flags="bgindex inherit"/>
+        <object name="WarnDialog.Button.Highlight.Selected"        background="FF800000" foreground="FF005FB8" flags="bgindex inherit"/>
+        <object name="WarnDialog.DefaultButton"                    background="FFFFE082" foreground="FF3B3B3B" flags="inherit"/>
+        <object name="WarnDialog.DefaultButton.Highlight"          background="FFFFE082" foreground="FFA1260D" flags="inherit"/>
+        <object name="WarnDialog.DefaultButton.Selected"           background="FF800000" foreground="FFA1260D" flags="bgindex inherit"/>
+        <object name="WarnDialog.DefaultButton.Highlight.Selected" background="FF800000" foreground="FF005FB8" flags="bgindex inherit"/>
+
+        <object name="WarnDialog.Edit"                             background="FF800000" foreground="FF3B3B3B" flags="bgindex inherit"/>
+        <object name="WarnDialog.Edit.Selected"                    background="FFADD6FF" foreground="FF3B3B3B" flags="inherit"/>
+        <object name="WarnDialog.Edit.Unchanged"                   background="FF800000" foreground="FF616161" flags="bgindex inherit"/>
+        <object name="WarnDialog.Edit.Disabled"                    background="FF800000" foreground="FFA0A0A0" flags="bgindex inherit"/>
+
+        <object name="WarnDialog.List.Box"                         background="FF800000" foreground="FF3B3B3B" flags="bgindex inherit"/>
+        <object name="WarnDialog.List.Title"                       background="FF800000" foreground="FF616161" flags="bgindex inherit"/>
+        <object name="WarnDialog.List.Text"                        background="FF800000" foreground="FF3B3B3B" flags="bgindex inherit"/>
+        <object name="WarnDialog.List.Text.Selected"               background="FF0060C0" foreground="FFFFFFFF" flags="inherit"/>
+        <object name="WarnDialog.List.Highlight"                   background="FF800000" foreground="FF005FB8" flags="bgindex inherit"/>
+        <object name="WarnDialog.List.Highlight.Selected"          background="FF0060C0" foreground="FFADD6FF" flags="inherit"/>
+        <object name="WarnDialog.List.GrayText"                    background="FF800000" foreground="FFA0A0A0" flags="bgindex inherit"/>
+        <object name="WarnDialog.List.GrayText.Selected"           background="FF0060C0" foreground="FFD0D0D0" flags="inherit"/>
+        <object name="WarnDialog.List.Disabled"                    background="FF800000" foreground="FFA0A0A0" flags="bgindex inherit"/>
+        <object name="WarnDialog.List.Arrows"                      background="FF800000" foreground="FF005FB8" flags="bgindex inherit"/>
+        <object name="WarnDialog.List.Arrows.Disabled"             background="FF800000" foreground="FFA0A0A0" flags="bgindex inherit"/>
+        <object name="WarnDialog.List.Arrows.Selected"             background="FF0060C0" foreground="FFFFFFFF" flags="inherit"/>
+        <object name="WarnDialog.List.Scrollbar"                   background="FFE5E5E5" foreground="FF616161" flags="inherit"/>
+
+        <object name="WarnDialog.Combo.Box"                        background="FF800000" foreground="FF3B3B3B" flags="bgindex inherit"/>
+        <object name="WarnDialog.Combo.Title"                      background="FF800000" foreground="FF616161" flags="bgindex inherit"/>
+        <object name="WarnDialog.Combo.Text"                       background="FF800000" foreground="FF3B3B3B" flags="bgindex inherit"/>
+        <object name="WarnDialog.Combo.Text.Selected"              background="FF0060C0" foreground="FFFFFFFF" flags="inherit"/>
+        <object name="WarnDialog.Combo.Highlight"                  background="FF800000" foreground="FF005FB8" flags="bgindex inherit"/>
+        <object name="WarnDialog.Combo.Highlight.Selected"         background="FF0060C0" foreground="FFADD6FF" flags="inherit"/>
+        <object name="WarnDialog.Combo.GrayText"                   background="FF800000" foreground="FFA0A0A0" flags="bgindex inherit"/>
+        <object name="WarnDialog.Combo.GrayText.Selected"          background="FF0060C0" foreground="FFD0D0D0" flags="inherit"/>
+        <object name="WarnDialog.Combo.Disabled"                   background="FF800000" foreground="FFA0A0A0" flags="bgindex inherit"/>
+        <object name="WarnDialog.Combo.Arrows"                     background="FF800000" foreground="FF005FB8" flags="bgindex inherit"/>
+        <object name="WarnDialog.Combo.Arrows.Disabled"            background="FF800000" foreground="FFA0A0A0" flags="bgindex inherit"/>
+        <object name="WarnDialog.Combo.Arrows.Selected"            background="FF0060C0" foreground="FFFFFFFF" flags="inherit"/>
+        <object name="WarnDialog.Combo.Scrollbar"                  background="FFE5E5E5" foreground="FF616161" flags="inherit"/>
+    </colors>
+</farconfig>
+

@@ -1,0 +1,190 @@
+Far Manager 3.0.6666 color keys (162 total)
+Extracted from real Far.exe /export output.
+Use as a checklist when authoring a new theme.
+
+## Clock  (1 keys) — Top-right clock
+    Clock
+
+## CommandLine  (4 keys) — Command line above key bar + Ctrl-O user screen
+    CommandLine
+    CommandLine.Prefix
+    CommandLine.Selected
+    CommandLine.UserScreen
+
+## CustomColor  (16 keys) — Generic palette slots used by macros and some plugins
+    CustomColor0
+    CustomColor1
+    CustomColor10
+    CustomColor11
+    CustomColor12
+    CustomColor13
+    CustomColor14
+    CustomColor15
+    CustomColor2
+    CustomColor3
+    CustomColor4
+    CustomColor5
+    CustomColor6
+    CustomColor7
+    CustomColor8
+    CustomColor9
+
+## Dialog  (44 keys) — Regular dialogs (Options, Find, Copy...)
+    Dialog.Box
+    Dialog.Box.Title
+    Dialog.Box.Title.Highlight
+    Dialog.Button
+    Dialog.Button.Highlight
+    Dialog.Button.Highlight.Selected
+    Dialog.Button.Selected
+    Dialog.Combo.Arrows
+    Dialog.Combo.Arrows.Disabled
+    Dialog.Combo.Arrows.Selected
+    Dialog.Combo.Box
+    Dialog.Combo.Disabled
+    Dialog.Combo.GrayText
+    Dialog.Combo.GrayText.Selected
+    Dialog.Combo.Highlight
+    Dialog.Combo.Highlight.Selected
+    Dialog.Combo.Scrollbar
+    Dialog.Combo.Text
+    Dialog.Combo.Text.Selected
+    Dialog.Combo.Title
+    Dialog.DefaultButton
+    Dialog.DefaultButton.Highlight
+    Dialog.DefaultButton.Highlight.Selected
+    Dialog.DefaultButton.Selected
+    Dialog.Disabled
+    Dialog.Edit
+    Dialog.Edit.Disabled
+    Dialog.Edit.Selected
+    Dialog.Edit.Unchanged
+    Dialog.List.Arrows
+    Dialog.List.Arrows.Disabled
+    Dialog.List.Arrows.Selected
+    Dialog.List.Box
+    Dialog.List.Disabled
+    Dialog.List.GrayText
+    Dialog.List.GrayText.Selected
+    Dialog.List.Highlight
+    Dialog.List.Highlight.Selected
+    Dialog.List.Scrollbar
+    Dialog.List.Text
+    Dialog.List.Text.Selected
+    Dialog.List.Title
+    Dialog.Text
+    Dialog.Text.Highlight
+
+## Editor  (5 keys) — Built-in editor (F4)
+    Editor.Clock
+    Editor.Scrollbar
+    Editor.Status
+    Editor.Text
+    Editor.Text.Selected
+
+## Help  (7 keys) — Built-in help viewer
+    Help.Box
+    Help.Box.Title
+    Help.Scrollbar
+    Help.Text
+    Help.Text.Highlight
+    Help.Topic
+    Help.Topic.Selected
+
+## HMenu  (4 keys) — Horizontal main menu at top of screen
+    HMenu.Highlight
+    HMenu.Highlight.Selected
+    HMenu.Text
+    HMenu.Text.Selected
+
+## Keybar  (3 keys) — Bottom F1..F12 strip
+    Keybar.Background
+    Keybar.Num
+    Keybar.Text
+
+## Menu  (13 keys) — Drop-down menus (from HMenu and most lists)
+    Menu.Arrows
+    Menu.Arrows.Disabled
+    Menu.Arrows.Selected
+    Menu.Box
+    Menu.GrayText
+    Menu.GrayText.Selected
+    Menu.Highlight
+    Menu.Highlight.Selected
+    Menu.Scrollbar
+    Menu.Text
+    Menu.Text.Disabled
+    Menu.Text.Selected
+    Menu.Title
+
+## Panel  (15 keys) — File panels (the main UI)
+    Panel.Box
+    Panel.Cursor
+    Panel.Cursor.Selected
+    Panel.DragText
+    Panel.Info.Selected
+    Panel.Info.Total
+    Panel.ScreensNumber
+    Panel.Scrollbar
+    Panel.Text
+    Panel.Text.Highlight
+    Panel.Text.Info
+    Panel.Text.Selected
+    Panel.Title
+    Panel.Title.Column
+    Panel.Title.Selected
+
+## Viewer  (6 keys) — Built-in viewer (F3)
+    Viewer.Arrows
+    Viewer.Clock
+    Viewer.Scrollbar
+    Viewer.Status
+    Viewer.Text
+    Viewer.Text.Selected
+
+## WarnDialog  (44 keys) — Warning/error dialogs (red surface in classic themes)
+    WarnDialog.Box
+    WarnDialog.Box.Title
+    WarnDialog.Box.Title.Highlight
+    WarnDialog.Button
+    WarnDialog.Button.Highlight
+    WarnDialog.Button.Highlight.Selected
+    WarnDialog.Button.Selected
+    WarnDialog.Combo.Arrows
+    WarnDialog.Combo.Arrows.Disabled
+    WarnDialog.Combo.Arrows.Selected
+    WarnDialog.Combo.Box
+    WarnDialog.Combo.Disabled
+    WarnDialog.Combo.GrayText
+    WarnDialog.Combo.GrayText.Selected
+    WarnDialog.Combo.Highlight
+    WarnDialog.Combo.Highlight.Selected
+    WarnDialog.Combo.Scrollbar
+    WarnDialog.Combo.Text
+    WarnDialog.Combo.Text.Selected
+    WarnDialog.Combo.Title
+    WarnDialog.DefaultButton
+    WarnDialog.DefaultButton.Highlight
+    WarnDialog.DefaultButton.Highlight.Selected
+    WarnDialog.DefaultButton.Selected
+    WarnDialog.Disabled
+    WarnDialog.Edit
+    WarnDialog.Edit.Disabled
+    WarnDialog.Edit.Selected
+    WarnDialog.Edit.Unchanged
+    WarnDialog.List.Arrows
+    WarnDialog.List.Arrows.Disabled
+    WarnDialog.List.Arrows.Selected
+    WarnDialog.List.Box
+    WarnDialog.List.Disabled
+    WarnDialog.List.GrayText
+    WarnDialog.List.GrayText.Selected
+    WarnDialog.List.Highlight
+    WarnDialog.List.Highlight.Selected
+    WarnDialog.List.Scrollbar
+    WarnDialog.List.Text
+    WarnDialog.List.Text.Selected
+    WarnDialog.List.Title
+    WarnDialog.Text
+    WarnDialog.Text.Highlight
+
