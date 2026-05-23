@@ -23,7 +23,9 @@ And `Colorer.hrd` — syntax highlighting for the F4 editor via the
 FarColorer plugin. Ports VS Code Light Modern's syntax tokens (keyword
 blue, string dark red, comment green, function mustard...). The install
 script registers it in `FarColorer\base\catalog.xml`; activate it via
-`F11 → FarColorer → Configure → HRD scheme → FarLight2026`. See
+`F11 → FarColorer → Settings → Main settings`, tick **`[x] TrueMod
+Enable`** and pick **FarLight2026 (theming-far)** in the **TrueMod
+color style** dropdown. See
 [docs/06-colorer-schemes.md](../../docs/06-colorer-schemes.md).
 
 ## Preview

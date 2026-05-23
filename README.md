@@ -74,8 +74,10 @@ building two production-ready theme families.
    palette and not the file-panel coloring, untick **Default Highlighting**.
 4. **(Optional) Activate matching F4 syntax colors.** If FarColorer is
    installed (it ships with modern Far), open any file in F4, then
-   `F11 → FarColorer → Configure → HRD scheme → FarLight2026` (or
-   `FarDark2026`). See [docs/06-colorer-schemes.md](docs/06-colorer-schemes.md).
+   `F11 → FarColorer → Settings → Main settings`. Make sure **`[x] TrueMod
+   Enable`** is ticked, and pick **FarLight2026 (theming-far)** (or
+   **FarDark2026 (theming-far)**) in the **TrueMod color style** dropdown.
+   See [docs/06-colorer-schemes.md](docs/06-colorer-schemes.md).
 
 ### Make your own theme
 
@@ -148,8 +150,11 @@ truecolor и уютно живёт в Windows Terminal с acrylic blur, но
    без обновления раскраски файлов, сними галочку **Default Highlighting**.
 4. **(Опционально) Включи подсветку синтаксиса в F4.** Если установлен
    FarColorer (он идёт в комплекте с современным Far), открой любой файл
-   в F4, дальше `F11 → FarColorer → Configure → HRD scheme → FarLight2026`
-   (или `FarDark2026`). См. [docs/06-colorer-schemes.md](docs/06-colorer-schemes.md).
+   в F4, дальше `F11 → FarColorer → Настройки → Основные настройки`.
+   Поставь галочку **`[x] TrueMod Включить`** и в дропдауне **«TrueMod
+   цветовой стиль»** выбери **FarLight2026 (theming-far)** или
+   **FarDark2026 (theming-far)**.
+   См. [docs/06-colorer-schemes.md](docs/06-colorer-schemes.md).
 
 ### Сделать свою тему
 

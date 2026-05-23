@@ -346,7 +346,9 @@ Write-Host "     Far asks which sections to apply; untick Default Highlighting"
 Write-Host "     if you want to keep your existing file-panel coloring."
 if (Test-Path $colorerCatalog) {
     Write-Host "  3. For F4 editor syntax colors:"
-    Write-Host "     F11 -> FarColorer -> Configure -> HRD scheme -> FarLight2026 (or FarDark2026)"
+    Write-Host "     F11 -> FarColorer -> Settings -> Main settings"
+    Write-Host "     Tick [x] TrueMod Enable, then pick FarLight2026 (or FarDark2026)"
+    Write-Host "     in the TrueMod color style dropdown."
 }
 
 if ($WaitOnExit) {

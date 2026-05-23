@@ -129,9 +129,9 @@ extra polish on specific file types.
 - **Colors only.** FarColorer doesn't change the editor's frame, status
   bar, or scrollbar — those are governed by `Editor.*` keys in your
   `.farconfig` interface theme.
-- **Restart required.** Switching HRD schemes inside FarColorer's GUI
-  applies immediately, but installing a new `.hrd` (from a file) requires
-  restarting Far so the plugin re-reads the catalog.
+- **Restart required.** Switching the TrueMod color style inside
+  FarColorer's GUI applies immediately, but installing a new `.hrd`
+  (from a file) requires restarting Far so the plugin re-reads the catalog.
 
 ## Uninstall
 
@@ -143,5 +143,5 @@ If you want to remove our schemes:
 3. Delete `Plugins\FarColorer\base\hrd\rgb\FarLight2026.hrd` and
    `FarDark2026.hrd`.
 
-Or, simpler: pick a different HRD scheme in FarColorer's GUI. Our
-schemes stay registered but become inactive.
+Or, simpler: pick a different scheme in the **TrueMod color style**
+dropdown. Our schemes stay registered but become inactive.
