@@ -16,7 +16,9 @@ acrylic variants work.
 
 ## Preview
 
-_(screenshots TBD — coming with v0.2)_
+![Panel mode](../../screenshots/fardark-2026-panels.png)
+
+![Acrylic variant with drop-down menu](../../screenshots/fardark-2026-acrylic.png)
 
 ## Palette
 

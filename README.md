@@ -7,7 +7,11 @@ fork.
 
 🇺🇸 [English](#english) · 🇷🇺 [Русский](#русский)
 
-![FarLight 2026 acrylic preview](screenshots/farlight-2026-acrylic.png)
+**FarLight 2026** (light) · **FarDark 2026** (dark)
+
+![FarLight 2026 — Ctrl-O with acrylic](screenshots/farlight-2026-acrylic.png)
+
+![FarDark 2026 — panels + drop-down menu over acrylic](screenshots/fardark-2026-acrylic.png)
 
 ---
 
