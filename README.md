@@ -39,7 +39,8 @@ building two production-ready theme families.
 | [docs/05-troubleshooting.md](docs/05-troubleshooting.md) | What to check when something doesn't apply, doesn't appear, or looks wrong. |
 | [reference/far-3.0.6666-keys.txt](reference/far-3.0.6666-keys.txt) | All 162 color keys, grouped, with a description per group. |
 | [reference/theme-skeleton.farconfig](reference/theme-skeleton.farconfig) | Empty theme template with all 162 keys preset to white-on-black. Start here when authoring. |
-| [scripts/install-theme.ps1](scripts/install-theme.ps1) | Install a theme into `Program Files\Far Manager\Addons\Colors\`. Auto-detects highlighting. Needs admin. |
+| [scripts/Install-AllThemes.ps1](scripts/Install-AllThemes.ps1) | **Recommended.** Detects Far, auto-elevates, installs every bundled theme + highlighting in one shot. Pick from Far's Themes menu afterwards. |
+| [scripts/install-theme.ps1](scripts/install-theme.ps1) | Install a single specific theme. Useful for testing one variant. Auto-detects matching highlighting. |
 | [scripts/backup-colors.ps1](scripts/backup-colors.ps1) | Export current Far config (colors + everything) before you change anything. |
 | [scripts/diff-themes.ps1](scripts/diff-themes.ps1) | Diff two `.farconfig` files by color key. Useful when authoring variants. |
 | [scripts/audit-contrast.ps1](scripts/audit-contrast.ps1) | Check a theme for low-contrast cells (WCAG-style). Excludes by-design exemptions. |
@@ -54,22 +55,15 @@ building two production-ready theme families.
    ```powershell
    .\scripts\backup-colors.ps1
    ```
-2. **Install the theme** from an **elevated** PowerShell (writes to
-   `Program Files`). Six bundled variants — pick one:
+2. **Install everything in one shot.** From a normal (unelevated) PowerShell
+   in the repo root:
    ```powershell
-   # Light family
-   .\scripts\install-theme.ps1 .\themes\farlight-2026\FarLight2026.farconfig            # strict solid
-   .\scripts\install-theme.ps1 .\themes\farlight-2026\FarLight2026Acrylic.farconfig     # CommandLine acrylic
-   .\scripts\install-theme.ps1 .\themes\farlight-2026\FarLight2026FullAcrylic.farconfig # all surfaces acrylic
-
-   # Dark family
-   .\scripts\install-theme.ps1 .\themes\fardark-2026\FarDark2026.farconfig
-   .\scripts\install-theme.ps1 .\themes\fardark-2026\FarDark2026Acrylic.farconfig
-   .\scripts\install-theme.ps1 .\themes\fardark-2026\FarDark2026FullAcrylic.farconfig
+   .\scripts\Install-AllThemes.ps1
    ```
-   The script auto-installs the matching `Highlighting.farconfig` (Light/Dark
-   file-coloring rules) under the same name. Pass `-NoHighlighting` to skip
-   that and keep your existing file-panel colors.
+   The script auto-detects Far's install location (registry), requests UAC
+   once, then copies all six interface variants and matching file-coloring
+   rules into `Program Files\Far Manager\Addons\Colors\`. Themes are passive
+   — installing all six is cheap; you pick the active one in Far's menu.
 3. **Restart Far**, then `F9 → Options → Colors → Themes → <pick the theme>`.
    Far will ask which sections to apply — if you want only the interface
    palette and not the file-panel coloring, untick **Default Highlighting**.
@@ -114,7 +108,8 @@ truecolor и уютно живёт в Windows Terminal с acrylic blur, но
 | [docs/05-troubleshooting.md](docs/05-troubleshooting.md) | Что проверять, когда что-то не применилось, не появилось или выглядит не так. |
 | [reference/far-3.0.6666-keys.txt](reference/far-3.0.6666-keys.txt) | Все 162 цветовых ключа, сгруппированные с описанием каждой группы. |
 | [reference/theme-skeleton.farconfig](reference/theme-skeleton.farconfig) | Пустой шаблон темы — все 162 ключа preset на белом-на-чёрном. С него начинай. |
-| [scripts/install-theme.ps1](scripts/install-theme.ps1) | Установка темы в `Program Files\Far Manager\Addons\Colors\`. Автоматически подцепляет соседний highlighting. Нужны админские права. |
+| [scripts/Install-AllThemes.ps1](scripts/Install-AllThemes.ps1) | **Рекомендуется.** Находит Far, поднимает права через UAC, ставит сразу все темы + highlighting'и одним проходом. Дальше выбираешь нужную в меню Far'а. |
+| [scripts/install-theme.ps1](scripts/install-theme.ps1) | Установка одной конкретной темы — для точечных тестов варианта. Подцепляет соседний highlighting. |
 | [scripts/backup-colors.ps1](scripts/backup-colors.ps1) | Экспорт текущего конфига Far'а (цвета и остальное) перед любыми изменениями. |
 | [scripts/diff-themes.ps1](scripts/diff-themes.ps1) | Diff двух `.farconfig` по ключам. Полезно при разработке вариантов темы. |
 | [scripts/audit-contrast.ps1](scripts/audit-contrast.ps1) | Проверка темы на низкоконтрастные ячейки (по WCAG). Учитывает by-design исключения. |
@@ -129,22 +124,15 @@ truecolor и уютно живёт в Windows Terminal с acrylic blur, но
    ```powershell
    .\scripts\backup-colors.ps1
    ```
-2. **Установи тему** из **elevated** PowerShell (пишем в `Program Files`).
-   Шесть вариантов на выбор:
+2. **Установи все темы одной командой.** Из обычного (не-elevated) PowerShell
+   в корне репо:
    ```powershell
-   # Светлое семейство
-   .\scripts\install-theme.ps1 .\themes\farlight-2026\FarLight2026.farconfig            # строгая сплошная
-   .\scripts\install-theme.ps1 .\themes\farlight-2026\FarLight2026Acrylic.farconfig     # acrylic в command line
-   .\scripts\install-theme.ps1 .\themes\farlight-2026\FarLight2026FullAcrylic.farconfig # acrylic на всех поверхностях
-
-   # Тёмное семейство
-   .\scripts\install-theme.ps1 .\themes\fardark-2026\FarDark2026.farconfig
-   .\scripts\install-theme.ps1 .\themes\fardark-2026\FarDark2026Acrylic.farconfig
-   .\scripts\install-theme.ps1 .\themes\fardark-2026\FarDark2026FullAcrylic.farconfig
+   .\scripts\Install-AllThemes.ps1
    ```
-   Скрипт автоматически подцепляет соседний `Highlighting.farconfig` (правила
-   раскраски файлов под Light/Dark) и ставит под тем же именем. Передай
-   `-NoHighlighting` чтобы оставить твою текущую раскраску файлов нетронутой.
+   Скрипт сам найдёт где установлен Far (через реестр), один раз запросит UAC,
+   потом разложит все 6 интерфейсных вариантов и соответствующие
+   highlighting'и в `Program Files\Far Manager\Addons\Colors\`. Темы пассивны —
+   ставить все 6 ничего не стоит; активную выберешь в меню Far'а.
 3. **Перезапусти Far**, дальше `F9 → Параметры → Цвета → Темы → <выбери тему>`.
    Far спросит, какие секции применять — если нужна только палитра интерфейса
    без обновления раскраски файлов, сними галочку **Default Highlighting**.

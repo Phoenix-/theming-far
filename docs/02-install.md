@@ -47,8 +47,17 @@ On Far 3.0.6666 (tested):
   3.0.6666. Some older builds picked this up; this one doesn't.
 
 So installing a theme **requires Administrator rights** (write access to
-`Program Files`). Use the helper script `scripts/install-theme.ps1` from
-an elevated PowerShell, or copy the files manually.
+`Program Files`). Easiest path:
+
+- **`scripts/Install-AllThemes.ps1`** — run from a normal PowerShell. It
+  detects the Far install via the Uninstall registry key, self-elevates
+  (prefers Windows 11 24H2+ `sudo`; falls back to UAC `RunAs`), then
+  copies every bundled theme + matching highlighting in one shot. Themes
+  are passive; installing all variants is cheap.
+- **`scripts/install-theme.ps1 <path>`** — for installing one specific
+  variant. Has to be run from an already-elevated PowerShell.
+
+Or just copy the files manually if you'd rather.
 
 ## After installing
 

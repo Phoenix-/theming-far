@@ -74,8 +74,10 @@
    low-contrast pairs. Aim for 0 failures at the default 3:1 threshold.
    The script already exempts intentionally-low-contrast cells (Disabled,
    GrayText, Box borders).
-7. **Install & visually test.** Use `scripts/install-theme.ps1` (elevated),
-   restart Far, switch to your theme. Walk through the checklist in
+7. **Install & visually test.** For a single variant: `scripts/install-theme.ps1`
+   (elevated). For the whole bundle in this repo: `scripts/Install-AllThemes.ps1`
+   from a normal terminal — it self-elevates. Restart Far, switch to your
+   theme. Walk through the checklist in
    `docs/03-palette-design.md#contrast--readability-checklist`.
 8. **Add to repo.** `themes/<name>/` with the `.farconfig` files, two
    PNG previews (panel mode + Ctrl-O), and a short `README.md` describing
