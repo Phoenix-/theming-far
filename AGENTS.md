@@ -14,8 +14,8 @@
     grouped, with a short description per group.
   - `reference/theme-skeleton.farconfig` — empty template with every key
     preset to white-on-black truecolor. Start by copying this.
-- **Two working theme families** under `themes/farlight-2026/` and
-  `themes/fardark-2026/`. Each family has three variants:
+- **Two working theme families** under `themes/FarLight-2026/` and
+  `themes/FarDark-2026/`. Each family has three variants:
   - **Solid** — strict palette, all truecolor RGB, looks identical in
     any WinTerm setup.
   - **Acrylic** — same palette but the four `CommandLine.*` keys use the
@@ -27,6 +27,11 @@
   Each family also ships a `Highlighting.farconfig` — file-panel coloring
   rules (Hidden, Directory, Executable, Archive, Temp) tuned for the
   family's background tone.
+
+  And a `Colorer.hrd` — syntax highlighting palette for the F4 editor
+  (via the FarColorer plugin). ~50 semantic keys (`def:Keyword`,
+  `def:String`, `def:Comment`, ...) tuned to match the theme. See
+  `docs/06-colorer-schemes.md`.
 - **Scripts** under `scripts/` for install / backup / diff.
 
 ## Recipe to build a new theme

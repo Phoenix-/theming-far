@@ -112,10 +112,10 @@ Going fully acrylic across all surfaces sounds great but in practice:
 
 The themes in this repo make different choices:
 
-- [FarLight2026.farconfig](../themes/farlight-2026/FarLight2026.farconfig)
+- [FarLight2026.farconfig](../themes/FarLight-2026/FarLight2026.farconfig)
   — fully solid. `bg=#FFFFFF` everywhere. Looks the same regardless of
   WinTerm settings.
-- [FarLight2026Acrylic.farconfig](../themes/farlight-2026/FarLight2026Acrylic.farconfig)
+- [FarLight2026Acrylic.farconfig](../themes/FarLight-2026/FarLight2026Acrylic.farconfig)
   — minimal acrylic, only on the four `CommandLine.*` keys. The keybar
   and panels stay opaque for stability.
 

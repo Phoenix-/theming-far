@@ -37,11 +37,11 @@
     Far installation directory. Default: C:\Program Files\Far Manager.
 
 .EXAMPLE
-    .\install-theme.ps1 ..\themes\farlight-2026\FarLight2026.farconfig
-    # Auto-detects ..\themes\farlight-2026\Highlighting.farconfig and uses it.
+    .\install-theme.ps1 ..\themes\FarLight-2026\FarLight2026.farconfig
+    # Auto-detects ..\themes\FarLight-2026\Highlighting.farconfig and uses it.
 
 .EXAMPLE
-    .\install-theme.ps1 ..\themes\fardark-2026\FarDark2026Acrylic.farconfig -NoHighlighting
+    .\install-theme.ps1 ..\themes\FarDark-2026\FarDark2026Acrylic.farconfig -NoHighlighting
     # Installs the interface, leaves existing file-panel coloring untouched.
 #>
 [CmdletBinding()]

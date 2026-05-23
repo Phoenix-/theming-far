@@ -14,6 +14,13 @@ Three variants ship together:
 See [docs/04-acrylic-trick.md](../../docs/04-acrylic-trick.md) for how the
 acrylic variants work.
 
+A `Highlighting.farconfig` is bundled for file-panel coloring under
+Dark, and `Colorer.hrd` ports VS Code Dark Modern's syntax palette to
+the F4 editor (via the FarColorer plugin). The install script handles
+both; activate the editor syntax via
+`F11 → FarColorer → Configure → HRD scheme → FarDark2026`.
+See [docs/06-colorer-schemes.md](../../docs/06-colorer-schemes.md).
+
 ## Preview
 
 ![Panel mode](../../screenshots/fardark-2026-panels.png)

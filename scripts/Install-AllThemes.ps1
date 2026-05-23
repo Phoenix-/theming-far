@@ -227,11 +227,127 @@ Write-Host "Installed $installed theme$(if($installed -ne 1){'s'}) + $installedH
 if ($skipped -gt 0) {
     Write-Host "Skipped $skipped due to errors." -ForegroundColor Yellow
 }
+
+# ---------------------------------------------------------------------------
+# Colorer schemes (optional — only if FarColorer plugin is installed)
+# ---------------------------------------------------------------------------
+
+$colorerBase    = Join-Path $FarRoot 'Plugins\FarColorer\base'
+$colorerCatalog = Join-Path $colorerBase 'catalog.xml'
+$colorerHrdDir  = Join-Path $colorerBase 'hrd\rgb'
+
+if (Test-Path $colorerCatalog) {
+    Write-Host ""
+    Write-Host "FarColorer detected — installing syntax-highlighting schemes" -ForegroundColor Cyan
+
+    if (-not (Test-Path $colorerHrdDir)) {
+        $null = New-Item -ItemType Directory -Path $colorerHrdDir -Force
+    }
+
+    # Collect (family, hrd-file) pairs
+    $hrdSchemes = foreach ($family in $themeFamilies) {
+        $hrd = Join-Path $family.FullName 'Colorer.hrd'
+        if (Test-Path $hrd) {
+            # Theme name = capitalised family name (FarLight-2026 -> FarLight2026)
+            $schemeName = ($family.Name -split '-' | ForEach-Object {
+                if ($_ -match '^\d') { $_ } else {
+                    [char]::ToUpper($_[0]) + $_.Substring(1)
+                }
+            }) -join ''
+            [pscustomobject]@{
+                Family     = $family.Name
+                Source     = $hrd
+                SchemeName = $schemeName
+                Target     = Join-Path $colorerHrdDir "$schemeName.hrd"
+            }
+        }
+    }
+
+    if ($hrdSchemes) {
+        # 1a. Remove any existing FarLight/FarDark .hrd files first. On NTFS
+        #     (case-insensitive) Copy-Item -Force overwrites contents but keeps
+        #     the OLD filename casing — so if an earlier run created
+        #     "Farlight2026.hrd", a later run with target "FarLight2026.hrd"
+        #     would not actually rename it. Delete-then-copy fixes this.
+        $existingFar = Get-ChildItem $colorerHrdDir -Filter 'Far*2026*.hrd' -ErrorAction SilentlyContinue
+        $currentTargetExact = $hrdSchemes.Target | ForEach-Object { Split-Path $_ -Leaf }
+        foreach ($f in $existingFar) {
+            # Case-sensitive comparison — Farlight2026.hrd != FarLight2026.hrd.
+            $isWrongCase = -not ($currentTargetExact -ccontains $f.Name)
+            Remove-Item $f.FullName -Force
+            if ($isWrongCase) {
+                Write-Host "  - removed stale: hrd\rgb\$($f.Name)" -ForegroundColor DarkGray
+            }
+        }
+
+        # 1b. Copy HRD files
+        foreach ($s in $hrdSchemes) {
+            Copy-Item $s.Source $s.Target -Force
+            Write-Host "  + hrd\rgb\$($s.SchemeName).hrd" -ForegroundColor Green
+        }
+
+        # 2. Patch catalog.xml — idempotently register our schemes
+        $catalog = Get-Content $colorerCatalog -Raw
+
+        # Back up the original ONCE (next to it; not overwritten on re-runs)
+        $backup = "$colorerCatalog.theming-far.bak"
+        if (-not (Test-Path $backup)) {
+            Copy-Item $colorerCatalog $backup -Force
+            Write-Host "  + catalog.xml backed up to $(Split-Path $backup -Leaf)" -ForegroundColor DarkGray
+        }
+
+        # Remove any prior block we inserted (delimited by our markers), then re-insert.
+        # This keeps the patch idempotent. We also consume one preceding line of
+        # whitespace so we don't accumulate blank lines on repeat runs, but we do
+        # NOT eat whitespace AFTER the end-marker — that's the indent for </hrd-sets>.
+        $beginMark = '<!-- theming-far:begin -->'
+        $endMark   = '<!-- theming-far:end -->'
+        $blockRx   = "(?s)\r?\n[ \t]*$([regex]::Escape($beginMark)).*?$([regex]::Escape($endMark))"
+        $catalog = [regex]::Replace($catalog, $blockRx, '')
+
+        # Build our block — every line indented 8 spaces to match siblings.
+        $blockLines = @("        $beginMark")
+        foreach ($s in $hrdSchemes) {
+            $desc = "$($s.SchemeName) (theming-far)"
+            $blockLines += "        <hrd class=`"rgb`" name=`"$($s.SchemeName)`" description=`"$desc`">"
+            $blockLines += "            <location link=`"hrd/rgb/$($s.SchemeName).hrd`"/>"
+            $blockLines += "        </hrd>"
+        }
+        $blockLines += "        $endMark"
+        $block = $blockLines -join "`r`n"
+
+        # Insert before </hrd-sets>. Capture the existing closing tag with its
+        # leading whitespace and prepend our block. This is a concrete (non-lookahead)
+        # match so it fires exactly once.
+        if ($catalog -match '(\s*)</hrd-sets>') {
+            $catalog = [regex]::Replace($catalog, '(\s*)</hrd-sets>', {
+                param($m)
+                "`r`n$block$($m.Groups[1].Value)</hrd-sets>"
+            })
+            Set-Content -Path $colorerCatalog -Value $catalog -Encoding UTF8 -NoNewline
+            Write-Host "  + catalog.xml patched: $($hrdSchemes.Count) scheme(s) registered" -ForegroundColor Green
+        }
+        else {
+            Write-Host "  ! catalog.xml has no </hrd-sets> tag — skipped registration" -ForegroundColor Yellow
+        }
+    }
+}
+else {
+    Write-Host ""
+    Write-Host "FarColorer plugin not found — skipping syntax-highlighting schemes." -ForegroundColor DarkGray
+    Write-Host "(That's fine if you don't use F4 editor with syntax highlighting.)" -ForegroundColor DarkGray
+}
+
 Write-Host ""
-Write-Host "Next: restart Far, then F9 -> Options -> Colors -> Themes."
-Write-Host "When applying a theme, Far asks which sections to use - tick"
-Write-Host "Default Highlighting only if you want our file-coloring rules"
-Write-Host "(directories/exec/archives) to replace your existing ones."
+Write-Host "Next:"
+Write-Host "  1. Restart Far."
+Write-Host "  2. F9 -> Options -> Colors -> Themes -> <pick a theme>."
+Write-Host "     Far asks which sections to apply; untick Default Highlighting"
+Write-Host "     if you want to keep your existing file-panel coloring."
+if (Test-Path $colorerCatalog) {
+    Write-Host "  3. For F4 editor syntax colors:"
+    Write-Host "     F11 -> FarColorer -> Configure -> HRD scheme -> FarLight2026 (or FarDark2026)"
+}
 
 if ($WaitOnExit) {
     Write-Host ""

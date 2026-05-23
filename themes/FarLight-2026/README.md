@@ -19,6 +19,13 @@ A `Highlighting.farconfig` is also bundled — file-panel coloring rules
 (directories blue, executables green, etc.) tuned for the Light palette.
 The install script auto-applies it; pass `-NoHighlighting` to skip.
 
+And `Colorer.hrd` — syntax highlighting for the F4 editor via the
+FarColorer plugin. Ports VS Code Light Modern's syntax tokens (keyword
+blue, string dark red, comment green, function mustard...). The install
+script registers it in `FarColorer\base\catalog.xml`; activate it via
+`F11 → FarColorer → Configure → HRD scheme → FarLight2026`. See
+[docs/06-colorer-schemes.md](../../docs/06-colorer-schemes.md).
+
 ## Preview
 
 ![Panel and drop-down menu](../../screenshots/farlight-2026-panels.png)

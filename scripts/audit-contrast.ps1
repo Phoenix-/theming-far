@@ -25,10 +25,10 @@
     Minimum acceptable contrast ratio. Default: 3.0.
 
 .EXAMPLE
-    .\audit-contrast.ps1 ..\themes\fardark-2026\FarDark2026.farconfig
+    .\audit-contrast.ps1 ..\themes\FarDark-2026\FarDark2026.farconfig
 
 .EXAMPLE
-    .\audit-contrast.ps1 ..\themes\farlight-2026\FarLight2026.farconfig -Threshold 4.5
+    .\audit-contrast.ps1 ..\themes\FarLight-2026\FarLight2026.farconfig -Threshold 4.5
 #>
 [CmdletBinding()]
 param(

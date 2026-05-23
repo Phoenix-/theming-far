@@ -17,7 +17,7 @@
     Second .farconfig file.
 
 .EXAMPLE
-    .\diff-themes.ps1 ..\themes\farlight-2026\FarLight2026.farconfig ..\themes\farlight-2026\FarLight2026Acrylic.farconfig
+    .\diff-themes.ps1 ..\themes\FarLight-2026\FarLight2026.farconfig ..\themes\FarLight-2026\FarLight2026Acrylic.farconfig
 #>
 [CmdletBinding()]
 param(

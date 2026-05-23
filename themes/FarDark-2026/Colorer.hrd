@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hrd PUBLIC "-//Cail Lomecb//DTD Colorer HRD take5//EN"
+  "http://colorer.sf.net/2003/hrd.dtd">
+<!--
+  FarDark 2026 Colorer scheme - VS Code Dark Modern syntax tokens.
+  Pair with the FarDark 2026 interface theme (themes/fardark-2026/).
+  Author: Phoenix- (github.com/Phoenix-)
+
+  Install via scripts/Install-AllThemes.ps1 - it copies this file into
+  Plugins\FarColorer\base\hrd\rgb\ and registers it in catalog.xml.
+
+  Activate in Far: F11 -> FarColorer -> Configure -> HRD scheme -> FarDark2026
+
+  Palette source: VS Code 1.86+ Dark Modern (2024-2026).
+-->
+<hrd xmlns="http://colorer.sf.net/2003/hrd">
+
+  <!-- Editor surface -->
+  <assign name="def:Text"        fore="#CCCCCC" back="#1F1F1F"/>
+  <assign name="def:HorzCross"   fore="#CCCCCC" back="#2A2A2A"/>
+  <assign name="def:VertCross"   fore="#CCCCCC" back="#2A2A2A"/>
+
+  <!-- Numbers -->
+  <assign name="def:Number"       fore="#B5CEA8"/>
+  <assign name="def:NumberDec"    fore="#B5CEA8"/>
+  <assign name="def:NumberHex"    fore="#B5CEA8"/>
+  <assign name="def:NumberBin"    fore="#B5CEA8"/>
+  <assign name="def:NumberOct"    fore="#B5CEA8"/>
+  <assign name="def:NumberFloat"  fore="#B5CEA8"/>
+  <assign name="def:NumberSuffix" fore="#B5CEA8"/>
+
+  <!-- Strings & characters -->
+  <assign name="def:String"           fore="#CE9178"/>
+  <assign name="def:StringContent"    fore="#CE9178"/>
+  <assign name="def:StringEdge"       fore="#CE9178"/>
+  <assign name="def:Character"        fore="#CE9178"/>
+  <assign name="def:CharacterContent" fore="#CE9178"/>
+
+  <!-- Comments -->
+  <assign name="def:Comment"           fore="#6A9955"/>
+  <assign name="def:CommentContent"    fore="#6A9955"/>
+  <assign name="def:CommentEdge"       fore="#6A9955"/>
+  <assign name="def:CommentDoc"        fore="#608B4E"/>
+  <assign name="def:CommentDocContent" fore="#608B4E"/>
+  <assign name="def:CommentDocEdge"    fore="#608B4E"/>
+
+  <!-- Symbols / operators / punctuation -->
+  <assign name="def:Symbol"       fore="#CCCCCC"/>
+  <assign name="def:SymbolStrong" fore="#CCCCCC" style="1"/>
+  <assign name="def:Operator"     fore="#CCCCCC"/>
+  <assign name="def:Prefix"       fore="#CCCCCC"/>
+  <assign name="def:PrefixStrong" fore="#CCCCCC" style="1"/>
+
+  <!-- Keywords -->
+  <assign name="def:Keyword"           fore="#569CD6" style="1"/>
+  <assign name="def:KeywordStrong"     fore="#569CD6" style="1"/>
+  <assign name="def:TypeKeyword"       fore="#4EC9B0"/>
+  <assign name="def:ClassKeyword"      fore="#4EC9B0"/>
+  <assign name="def:StructKeyword"     fore="#4EC9B0"/>
+  <assign name="def:InterfaceKeyword"  fore="#4EC9B0"/>
+  <assign name="def:FunctionKeyword"   fore="#DCDCAA"/>
+  <assign name="def:DeprecatedKeyword" fore="#6E6E6E"/>
+
+  <!-- Functions, constants, identifiers -->
+  <assign name="def:Function"        fore="#DCDCAA"/>
+  <assign name="def:Constant"        fore="#4FC1FF"/>
+  <assign name="def:BooleanConstant" fore="#569CD6"/>
+  <assign name="def:Register"        fore="#9CDCFE"/>
+  <assign name="def:Identifier"      fore="#9CDCFE"/>
+  <assign name="def:Var"             fore="#9CDCFE"/>
+  <assign name="def:VarStrong"       fore="#9CDCFE" style="1"/>
+
+  <!-- Preprocessor / directives -->
+  <assign name="def:Directive"        fore="#C586C0"/>
+  <assign name="def:Parameter"        fore="#9CDCFE"/>
+  <assign name="def:ParameterUnknown" fore="#9CDCFE"/>
+
+  <!-- Markup / tags -->
+  <assign name="def:Tag"      fore="#569CD6"/>
+  <assign name="def:OpenTag"  fore="#569CD6"/>
+  <assign name="def:CloseTag" fore="#569CD6"/>
+  <assign name="def:Label"        fore="#4FC1FF"/>
+  <assign name="def:LabelStrong"  fore="#4FC1FF" style="1"/>
+
+  <!-- Links / dates -->
+  <assign name="def:URI"   fore="#3794FF" style="4"/>
+  <assign name="def:URL"   fore="#3794FF" style="4"/>
+  <assign name="def:EMail" fore="#3794FF" style="4"/>
+  <assign name="def:Path"  fore="#3794FF"/>
+  <assign name="def:Date"  fore="#B5CEA8"/>
+  <assign name="def:Time"  fore="#B5CEA8"/>
+
+  <!-- Errors / TODO / debug -->
+  <assign name="def:Error"     fore="#FFFFFF" back="#A1260D" style="1"/>
+  <assign name="def:ErrorText" fore="#FF8484"/>
+  <assign name="def:TODO"      fore="#1F1F1F" back="#DCDCAA" style="1"/>
+  <assign name="def:Debug"     fore="#CCCCCC" back="#2A2A2A"/>
+
+  <!-- Bracket matching -->
+  <assign name="def:PairStart"       fore="#CCCCCC" back="#454545"/>
+  <assign name="def:PairEnd"         fore="#CCCCCC" back="#454545"/>
+  <assign name="def:PairStrongStart" fore="#CCCCCC" back="#264F78"/>
+  <assign name="def:PairStrongEnd"   fore="#CCCCCC" back="#264F78"/>
+
+  <!-- Diff / insertion blocks -->
+  <assign name="def:Insertion"      back="#1A331A"/>
+  <assign name="def:InsertionStart" fore="#6A9955" back="#1A331A"/>
+  <assign name="def:InsertionEnd"   fore="#6A9955" back="#1A331A"/>
+  <assign name="diff:diffOrg"   fore="#CE9178"/>
+  <assign name="diff:diffNew"   fore="#6A9955"/>
+  <assign name="diff:diffModif" fore="#569CD6"/>
+
+  <!-- Language-specific overrides matching VS Code -->
+  <assign name="c:PreprocInclude" fore="#C586C0"/>
+  <assign name="xml:CDStart"      fore="#6E6E6E"/>
+  <assign name="xml:CDEnd"        fore="#6E6E6E"/>
+
+</hrd>

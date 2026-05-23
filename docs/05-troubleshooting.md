@@ -102,7 +102,7 @@ depends on:
 Use `scripts/diff-themes.ps1`:
 
 ```powershell
-.\scripts\diff-themes.ps1 themes\farlight-2026\FarLight2026.farconfig themes\farlight-2026\FarLight2026Acrylic.farconfig
+.\scripts\diff-themes.ps1 themes\FarLight-2026\FarLight2026.farconfig themes\FarLight-2026\FarLight2026Acrylic.farconfig
 ```
 
 It compares the `<colors>` sections key-by-key and shows only differing

@@ -34,13 +34,14 @@ building two production-ready theme families.
 
 | Path | What |
 |---|---|
-| [themes/farlight-2026/](themes/farlight-2026/) | Light theme inspired by VS Code Light Modern (2026). Three variants: solid, command-line acrylic, full acrylic. |
-| [themes/fardark-2026/](themes/fardark-2026/) | Dark theme inspired by VS Code Dark Modern (2026). Same three variants. |
+| [themes/FarLight-2026/](themes/FarLight-2026/) | Light theme inspired by VS Code Light Modern (2026). Three variants: solid, command-line acrylic, full acrylic. |
+| [themes/FarDark-2026/](themes/FarDark-2026/) | Dark theme inspired by VS Code Dark Modern (2026). Same three variants. |
 | [docs/01-format.md](docs/01-format.md) | The `.farconfig` XML format, flags, palette indices, the `0x80` scheme-default sentinel. |
 | [docs/02-install.md](docs/02-install.md) | How to install a theme on Far 3.0.6666. The triplet, Program Files, the GUI-only import. |
 | [docs/03-palette-design.md](docs/03-palette-design.md) | How to design a palette and map it onto Far's 162 color keys. |
 | [docs/04-acrylic-trick.md](docs/04-acrylic-trick.md) | How to make Windows Terminal acrylic blur through Far surfaces. |
 | [docs/05-troubleshooting.md](docs/05-troubleshooting.md) | What to check when something doesn't apply, doesn't appear, or looks wrong. |
+| [docs/06-colorer-schemes.md](docs/06-colorer-schemes.md) | F4 editor syntax highlighting via the FarColorer plugin — how `.hrd` schemes work and how to author your own. |
 | [reference/far-3.0.6666-keys.txt](reference/far-3.0.6666-keys.txt) | All 162 color keys, grouped, with a description per group. |
 | [reference/theme-skeleton.farconfig](reference/theme-skeleton.farconfig) | Empty theme template with all 162 keys preset to white-on-black. Start here when authoring. |
 | [scripts/Install-AllThemes.ps1](scripts/Install-AllThemes.ps1) | **Recommended.** Detects Far, auto-elevates, installs every bundled theme + highlighting in one shot. Pick from Far's Themes menu afterwards. |
@@ -71,6 +72,10 @@ building two production-ready theme families.
 3. **Restart Far**, then `F9 → Options → Colors → Themes → <pick the theme>`.
    Far will ask which sections to apply — if you want only the interface
    palette and not the file-panel coloring, untick **Default Highlighting**.
+4. **(Optional) Activate matching F4 syntax colors.** If FarColorer is
+   installed (it ships with modern Far), open any file in F4, then
+   `F11 → FarColorer → Configure → HRD scheme → FarLight2026` (or
+   `FarDark2026`). See [docs/06-colorer-schemes.md](docs/06-colorer-schemes.md).
 
 ### Make your own theme
 
@@ -103,13 +108,14 @@ truecolor и уютно живёт в Windows Terminal с acrylic blur, но
 
 | Папка/файл | Что |
 |---|---|
-| [themes/farlight-2026/](themes/farlight-2026/) | Светлая тема в духе VS Code Light Modern (2026). Три варианта: обычная, command-line acrylic, full acrylic. |
-| [themes/fardark-2026/](themes/fardark-2026/) | Тёмная тема в духе VS Code Dark Modern (2026). Те же три варианта. |
+| [themes/FarLight-2026/](themes/FarLight-2026/) | Светлая тема в духе VS Code Light Modern (2026). Три варианта: обычная, command-line acrylic, full acrylic. |
+| [themes/FarDark-2026/](themes/FarDark-2026/) | Тёмная тема в духе VS Code Dark Modern (2026). Те же три варианта. |
 | [docs/01-format.md](docs/01-format.md) | Формат `.farconfig` XML, флаги, индексы палитры, `0x80` sentinel «scheme default». |
 | [docs/02-install.md](docs/02-install.md) | Установка темы в Far 3.0.6666. Что обязательно, что опционально, GUI-only импорт. |
 | [docs/03-palette-design.md](docs/03-palette-design.md) | Как спроектировать палитру и разложить её по 162 цветовым ключам Far'а. |
 | [docs/04-acrylic-trick.md](docs/04-acrylic-trick.md) | Как сделать так, чтобы acrylic blur Windows Terminal был виден сквозь поверхности Far'а. |
 | [docs/05-troubleshooting.md](docs/05-troubleshooting.md) | Что проверять, когда что-то не применилось, не появилось или выглядит не так. |
+| [docs/06-colorer-schemes.md](docs/06-colorer-schemes.md) | Подсветка синтаксиса в редакторе F4 через плагин FarColorer — формат `.hrd` и как сделать свою. |
 | [reference/far-3.0.6666-keys.txt](reference/far-3.0.6666-keys.txt) | Все 162 цветовых ключа, сгруппированные с описанием каждой группы. |
 | [reference/theme-skeleton.farconfig](reference/theme-skeleton.farconfig) | Пустой шаблон темы — все 162 ключа preset на белом-на-чёрном. С него начинай. |
 | [scripts/Install-AllThemes.ps1](scripts/Install-AllThemes.ps1) | **Рекомендуется.** Находит Far, поднимает права через UAC, ставит сразу все темы + highlighting'и одним проходом. Дальше выбираешь нужную в меню Far'а. |
@@ -140,6 +146,10 @@ truecolor и уютно живёт в Windows Terminal с acrylic blur, но
 3. **Перезапусти Far**, дальше `F9 → Параметры → Цвета → Темы → <выбери тему>`.
    Far спросит, какие секции применять — если нужна только палитра интерфейса
    без обновления раскраски файлов, сними галочку **Default Highlighting**.
+4. **(Опционально) Включи подсветку синтаксиса в F4.** Если установлен
+   FarColorer (он идёт в комплекте с современным Far), открой любой файл
+   в F4, дальше `F11 → FarColorer → Configure → HRD scheme → FarLight2026`
+   (или `FarDark2026`). См. [docs/06-colorer-schemes.md](docs/06-colorer-schemes.md).
 
 ### Сделать свою тему
 
