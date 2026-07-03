@@ -65,5 +65,8 @@ color style** dropdown. See
 
 ## Install
 
-See top-level [README](../../README.md#install) for the install procedure
-(triplet of files into `Addons\Colors\`).
+See top-level [README](../../README.md#install) and
+[docs/02-install.md](../../docs/02-install.md) for the install procedure.
+Short version: `scripts/Import-Theme.ps1` applies the interface palette
+**and** file highlighting in one `Far.exe -import` (Far's Themes menu applies
+the palette only).

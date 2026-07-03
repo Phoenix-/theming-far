@@ -53,48 +53,12 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
 # ---------------------------------------------------------------------------
-# Locate Far Manager
+# Locate Far Manager  (Find-FarRoot lives in the shared _FarCommon.ps1)
 # ---------------------------------------------------------------------------
 
-function Find-FarRoot {
-    # 1. Registry uninstall keys (system-wide + per-user)
-    $regPaths = @(
-        'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall',
-        'HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall',
-        'HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall'
-    )
-    foreach ($p in $regPaths) {
-        $hits = Get-ChildItem $p -ErrorAction SilentlyContinue | ForEach-Object {
-            $i = Get-ItemProperty $_.PSPath -ErrorAction SilentlyContinue
-            if (-not $i) { return }
-            $dn = $i.PSObject.Properties['DisplayName']
-            $il = $i.PSObject.Properties['InstallLocation']
-            if ($dn -and $il -and $dn.Value -like '*Far Manager*' -and $il.Value) {
-                $loc = $il.Value.TrimEnd('\','/')
-                if (Test-Path (Join-Path $loc 'Far.exe')) { $loc }
-            }
-        }
-        if ($hits) { return ($hits | Select-Object -First 1) }
-    }
+. "$PSScriptRoot\_FarCommon.ps1"
 
-    # 2. Typical fixed paths
-    $fallbacks = @(
-        "$env:ProgramFiles\Far Manager",
-        "${env:ProgramFiles(x86)}\Far Manager",
-        "$env:LOCALAPPDATA\Far Manager"
-    )
-    foreach ($f in $fallbacks) {
-        if ($f -and (Test-Path (Join-Path $f 'Far.exe'))) { return $f }
-    }
-
-    # 3. PATH lookup
-    $cmd = Get-Command Far.exe -ErrorAction SilentlyContinue
-    if ($cmd) { return (Split-Path $cmd.Source -Parent) }
-
-    return $null
-}
-
-if (-not $FarRoot) { $FarRoot = Find-FarRoot }
+$FarRoot = Find-FarRoot -Override $FarRoot
 if (-not $FarRoot -or -not (Test-Path (Join-Path $FarRoot 'Far.exe'))) {
     throw "Far Manager not found. Pass -FarRoot 'C:\path\to\Far Manager' to override."
 }
@@ -341,9 +305,16 @@ else {
 Write-Host ""
 Write-Host "Next:"
 Write-Host "  1. Restart Far."
-Write-Host "  2. F9 -> Options -> Colors -> Themes -> <pick a theme>."
-Write-Host "     Far asks which sections to apply; untick Default Highlighting"
-Write-Host "     if you want to keep your existing file-panel coloring."
+Write-Host "  2. Pick a theme. Two ways, with an IMPORTANT difference:"
+Write-Host "     a) F9 -> Options -> Colors -> Themes -> <pick> applies the"
+Write-Host "        INTERFACE PALETTE ONLY. Far's Themes menu never applies file"
+Write-Host "        highlighting (executables/archives coloring) — that's by design."
+Write-Host "     b) To apply the palette AND the file highlighting in one shot, run:"
+Write-Host "           .\Import-Theme.ps1            (interactive picker)"
+Write-Host "           .\Import-Theme.ps1 -Theme FarLight2026Acrylic"
+Write-Host "        It imports a combined config via 'Far.exe -import' (Far must be"
+Write-Host "        closed). Do NOT press Ctrl+R in the file-highlighting dialog — it"
+Write-Host "        resets colors to Far's indexed console defaults, not this theme."
 if (Test-Path $colorerCatalog) {
     Write-Host "  3. For F4 editor syntax colors:"
     Write-Host "     F11 -> FarColorer -> Settings -> Main settings"

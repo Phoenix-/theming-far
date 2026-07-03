@@ -4,34 +4,46 @@ Common ways things go sideways, and what to check.
 
 ## Theme doesn't appear in the Themes menu
 
-After copying the triplet and restarting Far:
+The Themes menu lists **only** files in `Addons\Colors\Interface\`.
+After copying and restarting Far:
 
-1. **Did you put files in `Program Files\Far Manager\Addons\Colors\`?**
-   Far 3.0.6666 does **not** read user-profile `%APPDATA%\Far Manager\Addons\Colors\`.
-   The files must be in the global install directory. This requires
-   Administrator rights.
-2. **Are all three files present?** Each `.farconfig` must exist in
-   `Interface\`, `Default Highlighting\`, and `Custom Highlighting\`
-   sub-directories with the **same exact filename**. Missing one and
-   the theme won't show up.
-3. **Did you fully restart Far?** The Themes menu is built at startup.
+1. **Is the file in `Program Files\Far Manager\Addons\Colors\Interface\`?**
+   That's the only folder the menu scans. Files in `Default Highlighting\`
+   or `Custom Highlighting\` never show up in the menu (they're for
+   `-import`). Far does **not** read `%APPDATA%\Far Manager\Addons\Colors\`
+   either — it must be the global install dir, which needs admin rights.
+2. **Did you fully restart Far?** The Themes menu is built at startup.
    In-flight Far processes won't see new themes.
-4. **File names with spaces or non-ASCII?** Usually fine in Far, but if
+3. **File names with spaces or non-ASCII?** Usually fine in Far, but if
    nothing works, try a plain-ASCII filename to rule it out.
+
+> You do **not** need matching files in all three folders for the theme to
+> appear — only the `Interface\` file matters for the menu. (An earlier
+> version of these docs claimed all three were required; that's wrong.)
 
 ## Theme appears but colors look wrong
 
-1. **Old colors persist after selecting the theme.** Some Far elements
+1. **File-name colors (executables, archives) didn't change.** Expected:
+   the Themes menu applies the interface palette **only**, never file
+   highlighting. Apply the theme with `scripts/Import-Theme.ps1` (or
+   `Far.exe -import` a combined farconfig) to get file coloring too. See
+   [02-install.md](02-install.md).
+2. **You pressed `Ctrl+R` and everything reset to bright console colors.**
+   `Ctrl+R` in the file-highlighting dialog resets the predefined groups to
+   Far's **indexed console defaults** (executables → light-green palette
+   index 10, archives → magenta, temp → brown), *not* to your theme. Those
+   are palette indices, so they render in your terminal's scheme colors, not
+   your literal RGB. Re-import the theme to undo.
+3. **Old colors persist after selecting the theme.** Some Far elements
    (Keybar, Clock, HMenu) cache their colors and only refresh on next
    restart. Exit Far completely, start again.
-2. **Some colors apply, others don't.** When selecting a theme, Far asks
-   which sections to apply (Interface / Default Highlighting / Custom
-   Highlighting). If you accidentally unticked Interface, only file-
-   panel highlighting changes.
-3. **Colors look "muddy" or "shifted".** Check that you used `flags="inherit"`
+4. **Colors look "muddy" or "shifted".** Check that you used `flags="inherit"`
    (truecolor) and not `flags="fgindex bgindex inherit"` (palette index).
    Palette index mode resolves through the Windows console palette
-   (`HKCU\Console`), not your literal RGB.
+   (`HKCU\Console`), not your literal RGB. Also make sure Far's **Virtual
+   Terminal (VT) rendering is enabled** (Options → Interface settings) —
+   without it Far approximates truecolor RGB to the nearest of 16 palette
+   indices, so `#098658` shows up as a palette green instead.
 
 ## Acrylic doesn't show through
 
@@ -62,13 +74,18 @@ Far is closed — Far recreates it with built-in defaults on next launch.
 You lose only your color selections; other settings live in separate `.db`
 files.
 
-## `Far.exe /import` says "unknown argument"
+## `Far.exe -import` doesn't seem to do anything
 
-`/import` was advertised in older builds but **doesn't exist in 3.0.6666**.
-Use the GUI: `F9 → Options → Colors → Themes`, or
-`F9 → Options → Configuration editor → Import`.
+1. **Was Far running?** `-import` writes the SQLite config, but a running Far
+   rewrites that config from its in-memory state on exit — silently discarding
+   your import. **Close all Far instances before importing.**
+   `scripts/Import-Theme.ps1` handles this (it waits for you to close Far).
+2. **Build note.** `-import`/`-export` work on current Far (verified on
+   **3.0.6699**). On the older 6666 build `-import` was reported to fail with
+   `unknown argument`; if you hit that, use the GUI
+   `F9 → Options → Configuration editor → Import` instead (applies all sections).
 
-`/export` does work, and is the correct way to back up.
+`-export` is the correct way to back up (Far closed, or it opens the GUI).
 
 ## Exported `.farconfig` has weird color values like `FF800000`
 
