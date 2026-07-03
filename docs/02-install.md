@@ -1,106 +1,121 @@
 # 02 · Installing a theme
 
-Far Manager's "Themes" menu (`F9 → Options → Colors → Themes`) shows every
-theme it finds at startup. To put your theme there, drop one or more
-`.farconfig` files into Far's `Addons\Colors\` directory.
+A full theme has **two** independent parts, and Far applies them through
+**two different mechanisms**. Getting this right is the whole trick:
 
-## What Far actually needs
+| Part | farconfig section | How Far applies it |
+|------|-------------------|--------------------|
+| Interface palette (Panel, Editor, Menu, dialogs, …) | `<colors>` | Themes menu **or** `-import` |
+| File-panel coloring (executables, archives, dirs, …) | `<highlight>` | **`-import` only** |
 
-Far recognizes **three** parallel sub-directories under `Addons\Colors\`,
-one per theme aspect:
+> **The Themes menu applies the interface palette ONLY.** It never applies
+> file highlighting. This is confirmed in Far's source
+> (`setcolor.cpp` → `apply_external_theme` reads only the `colors` node and
+> feeds `palette::LoadTheme`; the highlighting folders are never read by the
+> menu). So "pick a theme from the menu" changes your UI palette but leaves
+> the file-name colors untouched.
+
+To apply **both** in one action, use `-import` (see below), which pulls
+every section present in the file (`configdb.cpp` →
+`config_provider::Import`).
+
+## The easy path: `Import-Theme.ps1`
+
+```powershell
+.\scripts\Import-Theme.ps1                          # interactive picker
+.\scripts\Import-Theme.ps1 -Theme FarLight2026Acrylic   # direct
+```
+
+This generates a **combined** farconfig on the fly (the chosen variant's
+`<colors>` + its family's `<highlight>`, in one `<farconfig>`) and runs
+`Far.exe -import`. Result: palette **and** file coloring applied together.
+
+- The interactive menu uses arrow keys (↑/↓), Enter to apply, Esc to cancel.
+- **Far must be closed.** Importing while Far is open is silently discarded —
+  Far rewrites its SQLite config from in-memory state on exit. The script
+  detects a running Far and waits for you to close it (it never kills Far).
+- The repo keeps colors and highlighting in **separate** files; the combined
+  file is temporary and deleted afterward. No duplication.
+
+## The Themes menu (palette only)
+
+If you only want the interface palette to show up in
+`F9 → Options → Colors → Themes`, drop the Interface `.farconfig` into:
+
+```
+C:\Program Files\Far Manager\Addons\Colors\Interface\
+  MyTheme.farconfig            ← this is all the Themes menu reads
+```
+
+`scripts/Install-AllThemes.ps1` does this for every bundled variant (and
+also copies the highlighting files into `Default Highlighting\` so they're
+on disk for `-import`). Run it from a normal PowerShell — it self-elevates
+(prefers Windows 11 24H2+ `sudo`, falls back to UAC `RunAs`) because
+`Program Files` needs admin rights.
+
+### About the three `Addons\Colors\` sub-folders
 
 ```
 Addons\Colors\
-  Interface\                   ← UI palette (Panel, Editor, Menu, ...)
-    MyTheme.farconfig
-  Default Highlighting\        ← file-panel coloring rules
-    MyTheme.farconfig          (optional)
-  Custom Highlighting\         ← extra file-coloring (rarely used)
-    MyTheme.farconfig          (optional)
+  Interface\               ← UI palette; the ONLY folder the Themes menu reads
+  Default Highlighting\    ← predefined file-coloring groups (for -import)
+  Custom Highlighting\     ← extended/user file-coloring groups (for -import)
 ```
 
-**Only the Interface file is required.** If you drop just an Interface
-`.farconfig`, the theme will appear in the Themes menu and apply
-correctly. Far falls back to the user's existing file-panel coloring,
-which is usually the right behavior — most users have a custom
-highlighting set up and don't want a theme to overwrite it.
-
-Author your own **Default Highlighting** when you want file colors to
-harmonize with the theme (e.g. directories blue on a Light background,
-or yellow-ish on Dark). See the FarLight / FarDark themes in this repo —
-each ships a `Highlighting.farconfig` alongside the Interface variants.
-
-**Custom Highlighting** is for user-specific overrides (e.g. coloring
-`*.test.ts` differently). Themes don't typically ship one.
-
-Each `Addons\Colors\<sub-dir>` also has a **`Descript.ion`** file mapping
-filename to a description shown in some Far dialogs. Adding a line is
-polite but not required.
+- The **Themes menu reads only `Interface\`.** `Default Highlighting\` and
+  `Custom Highlighting\` are payloads for `-import`; the menu ignores them.
+- **`Descript.ion` is irrelevant to the menu** — it's ordinary file-description
+  metadata, never parsed when listing/applying themes. A theme not listed in
+  `Descript.ion` still shows up and applies fine. (Verified in source.)
+- There is **no dialog asking which sections to apply.** No such UI exists in
+  mainline Far — not in the menu, not on `-import`.
 
 ## Where is `Addons\Colors\` on disk?
 
-On Far 3.0.6666 (tested):
+- **`C:\Program Files\Far Manager\Addons\Colors\`** — this is what Far scans.
+  Requires Administrator rights to write.
+- **`%APPDATA%\Far Manager\Addons\Colors\`** — not scanned; don't put themes
+  there.
 
-- **`C:\Program Files\Far Manager\Addons\Colors\`** — works. This is the
-  global install directory and Far scans it at startup.
-- **`%APPDATA%\Far Manager\Addons\Colors\`** — does **not** work on
-  3.0.6666. Some older builds picked this up; this one doesn't.
+## `Far.exe -import` / `-export`
 
-So installing a theme **requires Administrator rights** (write access to
-`Program Files`). Easiest path:
+Both **work** on current Far (verified on build **3.0.6699**):
 
-- **`scripts/Install-AllThemes.ps1`** — run from a normal PowerShell. It
-  detects the Far install via the Uninstall registry key, self-elevates
-  (prefers Windows 11 24H2+ `sudo`; falls back to UAC `RunAs`), then
-  copies every bundled theme + matching highlighting in one shot. Themes
-  are passive; installing all variants is cheap.
-- **`scripts/install-theme.ps1 <path>`** — for installing one specific
-  variant. Has to be run from an already-elevated PowerShell.
+```powershell
+& "C:\Program Files\Far Manager\Far.exe" -import "path\to\Theme.farconfig"
+& "C:\Program Files\Far Manager\Far.exe" -export "$env:USERPROFILE\Desktop\backup.farconfig"
+```
 
-Or just copy the files manually if you'd rather.
+Single dash `-import` (double-slash `/import` is also accepted). **Close Far
+first** for `-import` — otherwise the change is discarded on Far's exit, and
+`-export` will open the GUI and hang instead of writing.
 
-## After installing
-
-1. **Restart Far completely.** The Themes menu is built at startup. If
-   Far is open while you copy files, it won't see them.
-2. Open `F9 → Options → Colors → Themes`. Your theme should appear in
-   the list.
-3. Select it. Far will ask which parts to apply (Interface / Default
-   Highlighting / Custom Highlighting). If you don't want to overwrite
-   your file-highlighting rules, untick those — apply only **Interface**.
-4. Some elements (keybar, clock, top menu) cache their colors and only
-   refresh on the next Far restart. If something looks half-applied,
-   exit Far and start it again.
+> Older note: on build 6666 `-import` was reported broken. It works on 6699.
+> If you're on a build where it genuinely fails, fall back to
+> `F9 → Options → Configuration editor → Import` (GUI, applies all sections).
 
 ## Backing up before you change themes
 
 ```powershell
-& "C:\Program Files\Far Manager\Far.exe" /export "$env:USERPROFILE\Desktop\my-old-far-colors.farconfig"
+& "C:\Program Files\Far Manager\Far.exe" -export "$env:USERPROFILE\Desktop\my-old-far-colors.farconfig"
 ```
 
-This writes your full current configuration (colors plus everything else)
-to a single file. To roll back: import it through the Themes menu, or
-delete `%APPDATA%\Far Manager\Profile\colors.db` while Far is closed —
-Far rebuilds it with built-in defaults on next start.
+This writes your full current configuration (colors, highlighting, and
+everything else) to one file. To roll back: `-import` it (Far closed), or
+delete `%APPDATA%\Far Manager\Profile\colors.db` / `highlight.db` while Far
+is closed — Far rebuilds them with built-in defaults on next start.
 
-## What about `Far.exe /import`?
+> **Do not press `Ctrl+R` in the file-highlighting dialog** (Options → File
+> highlighting) expecting it to load a theme. `Ctrl+R` resets the predefined
+> groups to Far's **indexed console defaults** (executables → light-green
+> palette index 10, etc.), not to any theme. It overwrites imported colors.
 
-`Far.exe /import <file>` exists in the command-line help but **fails on
-3.0.6666** (`Error processing "/import": unknown argument`). Import is
-GUI-only on this build:
+## Per-user installs without admin rights
 
-- `F9 → Options → Colors → Themes` (theme menu), **or**
-- `F9 → Options → Configuration editor → Import` (low-level config import).
-
-## Per-user theme installs
-
-If you don't have administrator rights and can't write to `Program Files`,
-your options are:
-
-- **Apply only.** Open `Configuration editor → Import` and point it at the
-  `.farconfig` directly. Far loads it into the active configuration without
-  needing the file on disk in `Addons\Colors\`. The theme won't appear in
-  the Themes menu, but it will be applied.
-- **Portable Far.** Far runs portably from any directory. If you can drop
-  Far into `%LOCALAPPDATA%\Far Manager\` and use that copy, you control
-  the `Addons\Colors\` directory inside it.
+- **Apply only, no menu entry.** `Far.exe -import <file>` (or
+  `Configuration editor → Import`) loads a theme into the active config
+  without the file living in `Program Files`. The theme won't appear in the
+  Themes menu, but it's applied. Use a combined farconfig to get both palette
+  and highlighting.
+- **Portable Far.** Far runs portably; if you control the install directory,
+  you control its `Addons\Colors\`.

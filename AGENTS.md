@@ -93,24 +93,50 @@
 These are real, learned-the-hard-way gotchas. The `docs/` files cover
 them in more detail.
 
-### `Far.exe /import` doesn't exist on 3.0.6666
+### The Themes menu applies the PALETTE ONLY — not file highlighting
 
-Don't suggest `Far.exe /import <file>` as an install method on this build.
-It returns "unknown argument". Use the GUI Themes menu or the
-`Configuration editor` → `Import` dialog.
+This is the big one. `F9 → Options → Colors → Themes` reads **only**
+`Addons\Colors\Interface\*.farconfig` and applies **only** the `<colors>`
+section (source: `setcolor.cpp` → `apply_external_theme` → `palette::LoadTheme`).
+It never reads the highlighting folders and never applies `<highlight>`.
+There is **no** "which sections to apply" dialog anywhere in Far.
 
-### `%APPDATA%\Far Manager\Addons\Colors\` is not scanned on 3.0.6666
+To apply file coloring (`<highlight>`) you must use **`Far.exe -import`**,
+which pulls every section in the file (`configdb.cpp` →
+`config_provider::Import`). `scripts/Import-Theme.ps1` generates a combined
+farconfig (`<colors>` + `<highlight>`) and imports it in one action.
+
+`Descript.ion` is irrelevant — the menu never reads it.
+
+### `Far.exe -import` / `-export` WORK (verified on 3.0.6699)
+
+Single dash `-import <file>` / `-export <file>` (double-slash also accepted).
+**Far must be closed** — a running Far overwrites the DB from memory on exit,
+discarding the import; `-export` on a running Far opens the GUI and hangs.
+(Older note: on 3.0.6666 `-import` was reported to return "unknown argument".)
+
+### Ctrl+R in the file-highlighting dialog resets to INDEX defaults
+
+`Ctrl+R` (Options → File highlighting) does NOT load a theme — it restores
+Far's 6 predefined groups to hardcoded **console-index** colors
+(`hilight.cpp` → `SetHighlighting`): exec = `C_LIGHTGREEN` (index 10),
+arc = magenta, temp = brown, etc. These are palette indices, so they render
+in the terminal's scheme colors, not literal RGB. It overwrites imported
+theme colors — warn the user off it.
+
+### `%APPDATA%\Far Manager\Addons\Colors\` is not scanned
 
 Themes must go in `C:\Program Files\Far Manager\Addons\Colors\`. Don't
 write to `%APPDATA%` thinking it'll work; verify with the user.
 
-### A theme is a TRIPLET, not one file
+### Repo layout: variants + one shared Highlighting.farconfig per family
 
-Same filename in three sub-directories of `Addons\Colors\`:
-`Interface\`, `Default Highlighting\`, `Custom Highlighting\`. If the
-user only wants colors and no custom file-panel highlighting, copy the
-Default and Custom Highlighting files **verbatim** from any built-in
-theme (e.g. `GreenMile`). They're identical across stock themes.
+Each `themes\<Family>\` holds several interface variants
+(`<Variant>.farconfig`, the `<colors>`) plus one shared
+`Highlighting.farconfig` (the `<highlight>`) for the whole family.
+`Import-Theme.ps1` merges the chosen variant with its family highlighting on
+the fly. `Install-AllThemes.ps1` lays the variants into `Interface\` (for the
+menu) and copies the highlighting into `Default Highlighting\` (for `-import`).
 
 ### The `0x80` sentinel for acrylic
 
