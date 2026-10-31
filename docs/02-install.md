@@ -34,6 +34,12 @@ This generates a **combined** farconfig on the fly (the chosen variant's
 - **Far must be closed.** Importing while Far is open is silently discarded —
   Far rewrites its SQLite config from in-memory state on exit. The script
   detects a running Far and waits for you to close it (it never kills Far).
+- **It also switches on VT rendering.** The combined file carries a
+  `<generalconfig>` section that sets `Interface.VirtualTerminalRendering = 1`
+  (without it every truecolor RGB is approximated to one of 16 console
+  palette indices) and `Interface.SetPalette = 0` (otherwise Far writes its
+  own 16-color palette into the terminal tab). Only these two settings are
+  touched. Pass `-SkipRenderingSettings` to leave them as they are.
 - The repo keeps colors and highlighting in **separate** files; the combined
   file is temporary and deleted afterward. No duplication.
 

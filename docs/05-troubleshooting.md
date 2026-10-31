@@ -41,9 +41,27 @@ After copying and restarting Far:
    (truecolor) and not `flags="fgindex bgindex inherit"` (palette index).
    Palette index mode resolves through the Windows console palette
    (`HKCU\Console`), not your literal RGB. Also make sure Far's **Virtual
-   Terminal (VT) rendering is enabled** (Options → Interface settings) —
-   without it Far approximates truecolor RGB to the nearest of 16 palette
-   indices, so `#098658` shows up as a palette green instead.
+   Terminal (VT) rendering is enabled** (Options → Interface settings →
+   *Use Virtual Terminal for rendering*) — without it Far approximates
+   truecolor RGB to the nearest of 16 palette indices, so `#098658` shows up
+   as a palette green instead. `scripts/Import-Theme.ps1` turns it on for you.
+5. **Colors are wild from the start and get worse after a while (tens of
+   minutes).** Same root cause as above — VT rendering is off — made worse by
+   `Interface.SetPalette = 1` (the default). With it, Far writes its own
+   16-color palette into the terminal tab (OSC 4) and caches which index is
+   "closest" to each theme RGB. When Windows Terminal later re-applies its
+   scheme to the tab (e.g. after `settings.json` is reloaded), the same
+   indices render in the scheme's colors and everything falls apart. Fix:
+   enable VT rendering, set `Interface.SetPalette` to `false` in
+   `far:config`, then open Far in a **new** tab — the old tab keeps the
+   palette Far wrote into it. `scripts/Import-Theme.ps1` sets both.
+6. **Same profile, different look on another machine.** Both settings above
+   live in `generalconfig.db`, not in `colors.db`, so copying only the color
+   files doesn't carry them. Windows Terminal settings (scheme, acrylic) are
+   not part of the Far profile at all — the Acrylic variants take the command
+   line colors from the WT scheme, so a dark scheme under FarLight gives a
+   dark command line. And copy the profile with **every** Far instance
+   closed: a running Far writes its in-memory config back on exit.
 
 ## Acrylic doesn't show through
 

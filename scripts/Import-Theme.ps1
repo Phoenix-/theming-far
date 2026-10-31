@@ -23,6 +23,13 @@
     <Variant>.farconfig + themes\<Family>\Highlighting.farconfig); the combined
     file is generated on the fly and deleted afterwards. No duplication.
 
+    The combined file also carries a small <generalconfig> section that turns
+    on Interface.VirtualTerminalRendering (without it Far approximates every
+    truecolor RGB to the nearest of 16 console palette indices) and turns off
+    Interface.SetPalette (otherwise Far overwrites the terminal tab's 16-color
+    palette with its own). Only these two settings are touched; pass
+    -SkipRenderingSettings to leave them alone.
+
 .PARAMETER Theme
     Apply this variant non-interactively (e.g. 'FarLight2026Acrylic'). Skips the
     menu. Matching is case-insensitive.
@@ -32,6 +39,10 @@
 
 .PARAMETER FarRoot
     Override Far's install directory (else auto-detected).
+
+.PARAMETER SkipRenderingSettings
+    Import only the palette and file highlighting; don't touch
+    Interface.VirtualTerminalRendering / Interface.SetPalette.
 
 .EXAMPLE
     .\Import-Theme.ps1
@@ -44,7 +55,8 @@
 param(
     [string]$Theme,
     [string]$ThemesRoot = (Join-Path $PSScriptRoot '..\themes'),
-    [string]$FarRoot
+    [string]$FarRoot,
+    [switch]$SkipRenderingSettings
 )
 
 Set-StrictMode -Version Latest
@@ -88,7 +100,8 @@ if (-not $themes) { throw "No theme variants found under $ThemesRoot" }
 function New-CombinedFarconfig {
     <#
         Merge a variant's <colors> file with its family's <highlight> file into
-        one <farconfig> written to a temp path. Returns the temp path.
+        one <farconfig> written to a temp path, plus a <generalconfig> section
+        for any -Settings (@{ Key; Name; Value }). Returns the temp path.
 
         We parse as XML rather than string-splice so malformed input fails loudly
         and namespaces/encoding are handled correctly. The interface file is the
@@ -96,7 +109,8 @@ function New-CombinedFarconfig {
     #>
     param(
         [Parameter(Mandatory)][string]$InterfacePath,
-        [string]$HighlightPath
+        [string]$HighlightPath,
+        [hashtable[]]$Settings
     )
 
     [xml]$doc = Get-Content -LiteralPath $InterfacePath -Raw -Encoding UTF8
@@ -112,6 +126,22 @@ function New-CombinedFarconfig {
         else {
             Write-Host "  (warning: no <highlight> in $HighlightPath — palette only)" -ForegroundColor Yellow
         }
+    }
+
+    # Same shape as Far's own -export: <setting key name type value/>, qword
+    # values in hex. Import upserts each listed setting and leaves the rest of
+    # generalconfig as is (configdb.cpp: iGeneralConfigDb::Import).
+    if ($Settings) {
+        $gc = $doc.CreateElement('generalconfig')
+        foreach ($s in $Settings) {
+            $e = $doc.CreateElement('setting')
+            $e.SetAttribute('key', $s.Key)
+            $e.SetAttribute('name', $s.Name)
+            $e.SetAttribute('type', 'qword')
+            $e.SetAttribute('value', ('{0:x}' -f $s.Value))
+            $null = $gc.AppendChild($e)
+        }
+        $null = $doc.farconfig.AppendChild($gc)
     }
 
     $tmp = Join-Path ([IO.Path]::GetTempPath()) ("theming-far-{0}.farconfig" -f [guid]::NewGuid())
@@ -244,9 +274,21 @@ if ($chosen.HighlightPath) {
     Write-Host "  highlight: $($chosen.HighlightPath)" -ForegroundColor DarkGray
 }
 
+# Truecolor themes need VT rendering; SetPalette off keeps the terminal's own
+# 16-color scheme. See docs/05-troubleshooting.md.
+$settings = @()
+if (-not $SkipRenderingSettings) {
+    $settings = @(
+        @{ Key = 'Interface'; Name = 'VirtualTerminalRendering'; Value = 1 },
+        @{ Key = 'Interface'; Name = 'SetPalette';               Value = 0 }
+    )
+    $list = ($settings | ForEach-Object { "$($_.Key).$($_.Name)=$($_.Value)" }) -join ', '
+    Write-Host "  settings:  $list" -ForegroundColor DarkGray
+}
+
 $combined = $null
 try {
-    $combined = New-CombinedFarconfig -InterfacePath $chosen.InterfacePath -HighlightPath $chosen.HighlightPath
+    $combined = New-CombinedFarconfig -InterfacePath $chosen.InterfacePath -HighlightPath $chosen.HighlightPath -Settings $settings
     $p = Start-Process $farExe -ArgumentList '-import', "`"$combined`"" -PassThru -Wait -NoNewWindow
     if ($p.ExitCode -ne 0) {
         throw "Far import exited with code $($p.ExitCode)."
@@ -258,5 +300,10 @@ finally {
 
 Write-Host ''
 Write-Host "Done — palette and file highlighting applied for $($chosen.Name)." -ForegroundColor Green
-Write-Host 'Start Far to see it. If colors look approximated to 16 palette entries,' -ForegroundColor DarkGray
-Write-Host 'enable truecolor: Far -> Options -> Interface settings -> Virtual Terminal (VT).' -ForegroundColor DarkGray
+if ($SkipRenderingSettings) {
+    Write-Host 'Rendering settings left as is. If colors look approximated to 16 palette entries,' -ForegroundColor Yellow
+    Write-Host 'enable truecolor: Far -> Options -> Interface settings -> Use Virtual Terminal for rendering.' -ForegroundColor Yellow
+}
+else {
+    Write-Host 'VT rendering enabled. Open Far in a NEW terminal tab — an old tab keeps the palette Far wrote into it.' -ForegroundColor DarkGray
+}

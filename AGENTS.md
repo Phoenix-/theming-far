@@ -115,6 +115,22 @@ Single dash `-import <file>` / `-export <file>` (double-slash also accepted).
 discarding the import; `-export` on a running Far opens the GUI and hangs.
 (Older note: on 3.0.6666 `-import` was reported to return "unknown argument".)
 
+`-import <file> <profilepath> [<localprofilepath>]` imports into another
+profile directory, which lets you test an import without touching the
+user's real profile.
+
+### Truecolor themes need VT rendering — and the setting isn't in `colors.db`
+
+With `Interface.VirtualTerminalRendering = 0` Far approximates every RGB to
+the nearest of 16 console palette indices, so a correct `colors.db` still
+looks garish. With `Interface.SetPalette = 1` (the default) Far also writes
+its own 16-color palette into the terminal tab; once Windows Terminal
+re-applies its scheme, the cached indices change color and the screen
+"falls apart" after a while. Both live in `generalconfig.db`, so a user
+who copied only the color files from a working machine won't have them.
+`scripts/Import-Theme.ps1` sets both via a `<generalconfig>` section in the
+combined import (`-SkipRenderingSettings` to opt out).
+
 ### Ctrl+R in the file-highlighting dialog resets to INDEX defaults
 
 `Ctrl+R` (Options → File highlighting) does NOT load a theme — it restores
