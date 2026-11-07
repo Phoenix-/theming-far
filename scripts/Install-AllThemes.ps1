@@ -1,4 +1,4 @@
-#Requires -Version 5.1
+﻿#Requires -Version 5.1
 <#
 .SYNOPSIS
     One-shot installer for all bundled theming-far themes.
@@ -213,11 +213,7 @@ if (Test-Path $colorerCatalog) {
         $hrd = Join-Path $family.FullName 'Colorer.hrd'
         if (Test-Path $hrd) {
             # Theme name = capitalised family name (FarLight-2026 -> FarLight2026)
-            $schemeName = ($family.Name -split '-' | ForEach-Object {
-                if ($_ -match '^\d') { $_ } else {
-                    [char]::ToUpper($_[0]) + $_.Substring(1)
-                }
-            }) -join ''
+            $schemeName = Get-ColorerSchemeName -FamilyName $family.Name
             [pscustomobject]@{
                 Family     = $family.Name
                 Source     = $hrd
@@ -316,10 +312,11 @@ Write-Host "        It imports a combined config via 'Far.exe -import' (Far must
 Write-Host "        closed). Do NOT press Ctrl+R in the file-highlighting dialog — it"
 Write-Host "        resets colors to Far's indexed console defaults, not this theme."
 if (Test-Path $colorerCatalog) {
-    Write-Host "  3. For F4 editor syntax colors:"
+    Write-Host "  3. F4 editor syntax colors: Import-Theme.ps1 selects the matching"
+    Write-Host "     FarColorer scheme. After switching via the Themes menu, do it by hand:"
     Write-Host "     F11 -> FarColorer -> Settings -> Main settings"
     Write-Host "     Tick [x] TrueMod Enable, then pick FarLight2026 (or FarDark2026)"
-    Write-Host "     in the TrueMod color style dropdown."
+    Write-Host "     in the TrueMod color style dropdown, and press OK."
 }
 
 if ($WaitOnExit) {

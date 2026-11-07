@@ -78,11 +78,12 @@ building two production-ready theme families.
    palette **only** — it never touches file highlighting (that's by design in
    Far). Use it for quick palette switching; use `Import-Theme.ps1` when you
    want the file colors too. See [docs/02-install.md](docs/02-install.md).
-4. **(Optional) Activate matching F4 syntax colors.** If FarColorer is
-   installed (it ships with modern Far), open any file in F4, then
-   `F11 → FarColorer → Settings → Main settings`. Make sure **`[x] TrueMod
-   Enable`** is ticked, and pick **FarLight2026 (theming-far)** (or
-   **FarDark2026 (theming-far)**) in the **TrueMod color style** dropdown.
+4. **F4 syntax colors.** If FarColorer is installed (it ships with modern
+   Far), `Import-Theme.ps1` also selects the matching syntax scheme. If you
+   switch themes through the Themes menu instead, select it by hand: open any
+   file in F4, then `F11 → FarColorer → Settings → Main settings`. Make sure
+   **`[x] TrueMod Enable`** is ticked, and pick **FarLight2026 (theming-far)**
+   (or **FarDark2026 (theming-far)**) in the **TrueMod color style** dropdown.
    See [docs/06-colorer-schemes.md](docs/06-colorer-schemes.md).
 
 ### Make your own theme
@@ -160,9 +161,11 @@ truecolor и уютно живёт в Windows Terminal с acrylic blur, но
    интерфейса — раскраску файлов оно не трогает (так задумано в самом Far).
    Пользуйся меню для быстрого переключения палитры, а `Import-Theme.ps1` —
    когда нужны и цвета файлов. См. [docs/02-install.md](docs/02-install.md).
-4. **(Опционально) Включи подсветку синтаксиса в F4.** Если установлен
-   FarColorer (он идёт в комплекте с современным Far), открой любой файл
-   в F4, дальше `F11 → FarColorer → Настройки → Основные настройки`.
+4. **Подсветка синтаксиса в F4.** Если установлен FarColorer (он идёт в
+   комплекте с современным Far), `Import-Theme.ps1` заодно выбирает
+   подходящую схему подсветки. Если переключаешь темы через меню Тем,
+   выбери её вручную: открой любой файл в F4, дальше
+   `F11 → FarColorer → Настройки → Основные настройки`.
    Поставь галочку **`[x] TrueMod Включить`** и в дропдауне **«TrueMod
    цветовой стиль»** выбери **FarLight2026 (theming-far)** или
    **FarDark2026 (theming-far)**.

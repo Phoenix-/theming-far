@@ -8,6 +8,11 @@ A full theme has **two** independent parts, and Far applies them through
 | Interface palette (Panel, Editor, Menu, dialogs, …) | `<colors>` | Themes menu **or** `-import` |
 | File-panel coloring (executables, archives, dirs, …) | `<highlight>` | **`-import` only** |
 
+(F4 syntax colors are a third part, owned by the FarColorer plugin: the
+`.hrd` scheme on disk plus the plugin's own setting that selects it. The
+Themes menu never touches it either; `Import-Theme.ps1` selects it through a
+`<pluginsconfig>` section. See [06-colorer-schemes.md](06-colorer-schemes.md).)
+
 > **The Themes menu applies the interface palette ONLY.** It never applies
 > file highlighting. This is confirmed in Far's source
 > (`setcolor.cpp` → `apply_external_theme` reads only the `colors` node and
@@ -40,6 +45,16 @@ This generates a **combined** farconfig on the fly (the chosen variant's
   palette indices) and `Interface.SetPalette = 0` (otherwise Far writes its
   own 16-color palette into the terminal tab). Only these two settings are
   touched. Pass `-SkipRenderingSettings` to leave them as they are.
+- **It also selects the F4 syntax scheme.** If FarColorer is installed and
+  the family's scheme is registered (`Install-AllThemes.ps1` does that), the
+  combined file carries a `<pluginsconfig>` section that sets FarColorer's
+  `TrueMod = 1` and `HrdNameTm = <scheme>` (e.g. `FarLight2026`). Only these
+  two values are written; FarColorer's other settings stay. If the scheme
+  isn't installed the script warns and leaves FarColorer alone. Pass
+  `-SkipColorer` to skip this.
+- **`-ProfilePath <dir>`** imports into another profile directory
+  (`Far.exe -import <file> <dir>`) instead of yours. Far doesn't have to be
+  closed for that — handy for checking what an import writes.
 - The repo keeps colors and highlighting in **separate** files; the combined
   file is temporary and deleted afterward. No duplication.
 

@@ -131,6 +131,20 @@ who copied only the color files from a working machine won't have them.
 `scripts/Import-Theme.ps1` sets both via a `<generalconfig>` section in the
 combined import (`-SkipRenderingSettings` to opt out).
 
+### The F4 syntax scheme is a FarColorer setting, not part of the theme
+
+Installing `Colorer.hrd` + patching `catalog.xml` only makes the scheme
+available. FarColorer picks it from its own `TrueMod` / `HrdNameTm` values in
+`Profile\PluginsData\D2F36B62-A470-418D-83A3-ED7A3710E5B5.db`; with no saved
+values it uses its built-in `default` scheme, and the user sees a themed
+editor with old token colors. `Far.exe -import` handles a `<pluginsconfig>`
+section (upserts the listed values, keeps the rest — verified on 3.0.6699),
+so `scripts/Import-Theme.ps1` sets both values there (`-SkipColorer` to opt
+out). Value names come from the plugin binary (FarColorer 1.6.13): `Enabled`,
+`HrdName`, `HrdNameTm`, `TrueMod`, `ChangeBgEditor`, `CrossDraw`,
+`PairsDraw`, `Catalog`. To check what an import writes without touching the
+user's profile, use `Import-Theme.ps1 -ProfilePath <dir>`.
+
 ### Ctrl+R in the file-highlighting dialog resets to INDEX defaults
 
 `Ctrl+R` (Options → File highlighting) does NOT load a theme — it restores

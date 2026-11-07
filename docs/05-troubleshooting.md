@@ -62,6 +62,15 @@ After copying and restarting Far:
    line colors from the WT scheme, so a dark scheme under FarLight gives a
    dark command line. And copy the profile with **every** Far instance
    closed: a running Far writes its in-memory config back on exit.
+7. **F4 editor: frame and status bar are themed, but the code is in old
+   colors.** The editor background comes from the theme's `Editor.Text`, but
+   token colors come from FarColorer's **TrueMod color style**, which the
+   theme files don't set. If FarColorer's settings were never saved
+   (`PluginsData\D2F36B62-A470-418D-83A3-ED7A3710E5B5.db` holds no values),
+   it falls back to its built-in `default` scheme, so the old token colors
+   show through. Fix: run `scripts/Import-Theme.ps1` (it selects the
+   family's scheme), or pick it by hand — see
+   [06-colorer-schemes.md](06-colorer-schemes.md#how-to-activate).
 
 ## Acrylic doesn't show through
 

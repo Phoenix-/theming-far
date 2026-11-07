@@ -1,4 +1,4 @@
-#Requires -Version 5.1
+﻿#Requires -Version 5.1
 <#
     _FarCommon.ps1 — shared helpers for the theming-far scripts.
 
@@ -9,6 +9,7 @@
       Get-FarExe          Full path to Far.exe under a given root.
       Test-FarRunning     Is a Far process currently running?
       Wait-FarClosed      Interactively wait until the user closes Far.
+      Get-ColorerSchemeName  FarColorer scheme name for a theme family folder.
 #>
 
 Set-StrictMode -Version Latest
@@ -74,6 +75,22 @@ function Get-FarExe {
     $exe = Join-Path $FarRoot 'Far.exe'
     if (-not (Test-Path $exe)) { throw "Far.exe not found at '$exe'." }
     return $exe
+}
+
+function Get-ColorerSchemeName {
+    <#
+    .SYNOPSIS
+        Name a family's Colorer.hrd is registered under in FarColorer's catalog.
+    .DESCRIPTION
+        Family folder name with the dashes dropped and each word capitalised:
+        FarLight-2026 -> FarLight2026. Install-AllThemes.ps1 registers the
+        scheme under this name; Import-Theme.ps1 selects it by the same name.
+    #>
+    [OutputType([string])]
+    param([Parameter(Mandatory)][string]$FamilyName)
+    ($FamilyName -split '-' | ForEach-Object {
+        if ($_ -match '^\d') { $_ } else { [char]::ToUpper($_[0]) + $_.Substring(1) }
+    }) -join ''
 }
 
 function Test-FarRunning {

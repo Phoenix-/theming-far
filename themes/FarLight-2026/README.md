@@ -22,7 +22,8 @@ The install script auto-applies it; pass `-NoHighlighting` to skip.
 And `Colorer.hrd` — syntax highlighting for the F4 editor via the
 FarColorer plugin. Ports VS Code Light Modern's syntax tokens (keyword
 blue, string dark red, comment green, function mustard...). The install
-script registers it in `FarColorer\base\catalog.xml`; activate it via
+script registers it in `FarColorer\base\catalog.xml` and
+`scripts/Import-Theme.ps1` selects it. To select it by hand:
 `F11 → FarColorer → Settings → Main settings`, tick **`[x] TrueMod
 Enable`** and pick **FarLight2026 (theming-far)** in the **TrueMod
 color style** dropdown. See
@@ -67,6 +68,6 @@ color style** dropdown. See
 
 See top-level [README](../../README.md#install) and
 [docs/02-install.md](../../docs/02-install.md) for the install procedure.
-Short version: `scripts/Import-Theme.ps1` applies the interface palette
-**and** file highlighting in one `Far.exe -import` (Far's Themes menu applies
-the palette only).
+Short version: `scripts/Import-Theme.ps1` applies the interface palette,
+file highlighting and the F4 syntax scheme in one `Far.exe -import` (Far's
+Themes menu applies the palette only).

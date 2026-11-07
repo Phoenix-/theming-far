@@ -67,7 +67,43 @@ silently skips this step.
 
 ## How to activate
 
-After install + Far restart:
+Installing the `.hrd` only makes the scheme *available*. FarColorer uses
+whatever its **TrueMod color style** setting says; until that setting is
+saved, it's the built-in `default` scheme. The interface theme can't change
+this: the setting lives in FarColorer's own settings DB
+(`%APPDATA%\Far Manager\Profile\PluginsData\D2F36B62-A470-418D-83A3-ED7A3710E5B5.db`),
+not in `colors.db`. Symptom of a scheme that was never selected: the editor
+frame and background follow the theme, but keywords, strings and comments
+come out in the old colors.
+
+### Automatically: `Import-Theme.ps1`
+
+`scripts/Import-Theme.ps1` selects the family's scheme as part of the import
+(Far closed). It adds a `<pluginsconfig>` section to the combined farconfig:
+
+```xml
+<pluginsconfig>
+  <plugin guid="D2F36B62-A470-418D-83A3-ED7A3710E5B5">
+    <hierarchicalconfig>
+      <key name="D2F36B62-A470-418D-83A3-ED7A3710E5B5" description="FarColorer">
+        <value name="TrueMod" type="qword" value="1"/>
+        <value name="HrdNameTm" type="text" value="FarLight2026"/>
+      </key>
+    </hierarchicalconfig>
+  </plugin>
+</pluginsconfig>
+```
+
+`Far.exe -import` upserts these two values and keeps the plugin's other
+settings (verified on Far 3.0.6699 / FarColorer 1.6.13). The script does
+this only when the scheme is registered in `catalog.xml` and its `.hrd` is
+in place, so it never selects a scheme FarColorer can't load. `-SkipColorer`
+turns it off.
+
+### By hand
+
+Needed if you switch themes through the Themes menu, which never touches
+FarColorer. After install + Far restart:
 
 1. Open the F4 editor on any file (any source file works).
 2. **F11 → FarColorer → Settings → Main settings** (Настройки → Основные настройки).
@@ -79,7 +115,8 @@ After install + Far restart:
      checkbox) and pick **FarLight2026 (theming-far)** or
      **FarDark2026 (theming-far)**.
 4. Confirm with **OK**. Colors update immediately and persist across Far
-   sessions.
+   sessions. Without **OK** nothing is saved, and the next Far start is back
+   on the `default` scheme.
 
 Note: there are **two** style dropdowns in this dialog:
 

@@ -17,10 +17,10 @@ acrylic variants work.
 A `Highlighting.farconfig` is bundled for file-panel coloring under
 Dark, and `Colorer.hrd` ports VS Code Dark Modern's syntax palette to
 the F4 editor (via the FarColorer plugin). The install script handles
-both; activate the editor syntax via
-`F11 → FarColorer → Settings → Main settings`, tick **`[x] TrueMod
-Enable`** and pick **FarDark2026 (theming-far)** in the **TrueMod
-color style** dropdown.
+both, and `scripts/Import-Theme.ps1` selects the editor scheme. To select
+it by hand: `F11 → FarColorer → Settings → Main settings`, tick
+**`[x] TrueMod Enable`** and pick **FarDark2026 (theming-far)** in the
+**TrueMod color style** dropdown.
 See [docs/06-colorer-schemes.md](../../docs/06-colorer-schemes.md).
 
 ## Preview

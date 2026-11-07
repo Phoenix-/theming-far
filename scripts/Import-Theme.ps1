@@ -1,7 +1,8 @@
-#Requires -Version 5.1
+﻿#Requires -Version 5.1
 <#
 .SYNOPSIS
-    Apply a theming-far theme (interface palette + file highlighting) in one shot.
+    Apply a theming-far theme (interface palette + file highlighting + F4
+    syntax scheme) in one shot.
 
 .DESCRIPTION
     Far Manager's built-in Themes menu (F9 -> Options -> Colors -> Themes) applies
@@ -30,6 +31,16 @@
     palette with its own). Only these two settings are touched; pass
     -SkipRenderingSettings to leave them alone.
 
+    If FarColorer is installed and the family's Colorer scheme is registered
+    in its catalog (Install-AllThemes.ps1 does that), the combined file also
+    carries a <pluginsconfig> section for FarColorer: TrueMod = 1 and
+    HrdNameTm = <scheme>, i.e. the F4 editor's syntax colors switch to the
+    theme's scheme. Without it FarColorer keeps whatever TrueMod color style
+    it had — on a profile where it was never saved, its built-in `default`
+    scheme, whose token colors show through the themed editor. Only these two values
+    are written; the rest of FarColorer's settings are left as is. Pass
+    -SkipColorer to leave FarColorer alone.
+
 .PARAMETER Theme
     Apply this variant non-interactively (e.g. 'FarLight2026Acrylic'). Skips the
     menu. Matching is case-insensitive.
@@ -44,6 +55,14 @@
     Import only the palette and file highlighting; don't touch
     Interface.VirtualTerminalRendering / Interface.SetPalette.
 
+.PARAMETER SkipColorer
+    Don't touch FarColorer's settings (TrueMod / TrueMod color style).
+
+.PARAMETER ProfilePath
+    Import into this Far profile directory instead of the user's own
+    (Far.exe -import <file> <profilepath>). Far doesn't have to be closed
+    for that, so it's a safe way to test an import.
+
 .EXAMPLE
     .\Import-Theme.ps1
     # Interactive: pick a theme with Up/Down, Enter to apply, Esc to cancel.
@@ -56,7 +75,9 @@ param(
     [string]$Theme,
     [string]$ThemesRoot = (Join-Path $PSScriptRoot '..\themes'),
     [string]$FarRoot,
-    [switch]$SkipRenderingSettings
+    [switch]$SkipRenderingSettings,
+    [switch]$SkipColorer,
+    [string]$ProfilePath
 )
 
 Set-StrictMode -Version Latest
@@ -76,6 +97,9 @@ function Get-Themes {
     param([string]$Root)
     foreach ($family in Get-ChildItem $Root -Directory | Sort-Object Name) {
         $highlight = Join-Path $family.FullName 'Highlighting.farconfig'
+        $colorer   = if (Test-Path (Join-Path $family.FullName 'Colorer.hrd')) {
+                         Get-ColorerSchemeName -FamilyName $family.Name
+                     } else { $null }
         $variants = Get-ChildItem $family.FullName -Filter '*.farconfig' |
                     Where-Object { $_.Name -ne 'Highlighting.farconfig' } |
                     Sort-Object Name
@@ -85,6 +109,7 @@ function Get-Themes {
                 Name          = [IO.Path]::GetFileNameWithoutExtension($v.Name)
                 InterfacePath = $v.FullName
                 HighlightPath = if (Test-Path $highlight) { $highlight } else { $null }
+                ColorerScheme = $colorer
             }
         }
     }
@@ -101,7 +126,9 @@ function New-CombinedFarconfig {
     <#
         Merge a variant's <colors> file with its family's <highlight> file into
         one <farconfig> written to a temp path, plus a <generalconfig> section
-        for any -Settings (@{ Key; Name; Value }). Returns the temp path.
+        for any -Settings (@{ Key; Name; Value }) and a <pluginsconfig> section
+        for any -PluginSettings (@{ Guid; Description; Values = @(@{ Name;
+        Type = 'qword'|'text'; Value }) }). Returns the temp path.
 
         We parse as XML rather than string-splice so malformed input fails loudly
         and namespaces/encoding are handled correctly. The interface file is the
@@ -110,7 +137,8 @@ function New-CombinedFarconfig {
     param(
         [Parameter(Mandatory)][string]$InterfacePath,
         [string]$HighlightPath,
-        [hashtable[]]$Settings
+        [hashtable[]]$Settings,
+        [hashtable[]]$PluginSettings
     )
 
     [xml]$doc = Get-Content -LiteralPath $InterfacePath -Raw -Encoding UTF8
@@ -144,9 +172,58 @@ function New-CombinedFarconfig {
         $null = $doc.farconfig.AppendChild($gc)
     }
 
+    # Same shape as Far's own -export of PluginsData\<guid>.db: a plugin's
+    # values live in a key named after its GUID. Import upserts the listed
+    # values and keeps the plugin's other settings (verified on 3.0.6699).
+    if ($PluginSettings) {
+        $pc = $doc.CreateElement('pluginsconfig')
+        foreach ($p in $PluginSettings) {
+            $plugin = $doc.CreateElement('plugin')
+            $plugin.SetAttribute('guid', $p.Guid)
+            $hc = $doc.CreateElement('hierarchicalconfig')
+            $key = $doc.CreateElement('key')
+            $key.SetAttribute('name', $p.Guid)
+            $key.SetAttribute('description', $p.Description)
+            foreach ($v in $p.Values) {
+                $e = $doc.CreateElement('value')
+                $e.SetAttribute('name', $v.Name)
+                $e.SetAttribute('type', $v.Type)
+                $e.SetAttribute('value', $(if ($v.Type -eq 'qword') { '{0:x}' -f $v.Value } else { [string]$v.Value }))
+                $null = $key.AppendChild($e)
+            }
+            $null = $hc.AppendChild($key)
+            $null = $plugin.AppendChild($hc)
+            $null = $pc.AppendChild($plugin)
+        }
+        $null = $doc.farconfig.AppendChild($pc)
+    }
+
     $tmp = Join-Path ([IO.Path]::GetTempPath()) ("theming-far-{0}.farconfig" -f [guid]::NewGuid())
     $doc.Save($tmp)
     return $tmp
+}
+
+# ---------------------------------------------------------------------------
+# FarColorer (F4 editor syntax colors)
+# ---------------------------------------------------------------------------
+
+$ColorerGuid = 'D2F36B62-A470-418D-83A3-ED7A3710E5B5'
+
+function Test-ColorerScheme {
+    <#
+        Is FarColorer installed under $FarRoot, and is $Scheme registered in its
+        catalog with the .hrd in place? Returns 'NotInstalled', 'NotRegistered'
+        or 'Ready'. Selecting a scheme FarColorer can't find would leave the
+        editor without syntax colors, so we only select a 'Ready' one.
+    #>
+    param([Parameter(Mandatory)][string]$FarRoot, [Parameter(Mandatory)][string]$Scheme)
+    $base = Join-Path $FarRoot 'Plugins\FarColorer\base'
+    $catalog = Join-Path $base 'catalog.xml'
+    if (-not (Test-Path $catalog)) { return 'NotInstalled' }
+    $text = Get-Content -LiteralPath $catalog -Raw -Encoding UTF8
+    $registered = $text -match ('<hrd\b[^>]*\bname="{0}"' -f [regex]::Escape($Scheme))
+    $hrdPresent = Test-Path (Join-Path $base "hrd\rgb\$Scheme.hrd")
+    if ($registered -and $hrdPresent) { 'Ready' } else { 'NotRegistered' }
 }
 
 # ---------------------------------------------------------------------------
@@ -260,8 +337,12 @@ $root = Find-FarRoot -Override $FarRoot
 if (-not $root) { throw "Far Manager not found. Pass -FarRoot 'C:\path\to\Far Manager'." }
 $farExe = Get-FarExe -FarRoot $root
 
-# Far must be closed for the import to stick
-if (-not (Wait-FarClosed)) {
+# Far must be closed for the import to stick — unless we import into a
+# different profile, which the running Far never writes back.
+if ($ProfilePath) {
+    $ProfilePath = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($ProfilePath).TrimEnd('\')
+}
+elseif (-not (Wait-FarClosed)) {
     Write-Host 'Cancelled — Far still running.' -ForegroundColor DarkGray
     return
 }
@@ -269,6 +350,9 @@ if (-not (Wait-FarClosed)) {
 Write-Host ''
 Write-Host "Applying theme: $($chosen.Name)" -ForegroundColor Cyan
 Write-Host "  Far:       $farExe" -ForegroundColor DarkGray
+if ($ProfilePath) {
+    Write-Host "  profile:   $ProfilePath" -ForegroundColor DarkGray
+}
 Write-Host "  palette:   $($chosen.InterfacePath)" -ForegroundColor DarkGray
 if ($chosen.HighlightPath) {
     Write-Host "  highlight: $($chosen.HighlightPath)" -ForegroundColor DarkGray
@@ -286,10 +370,40 @@ if (-not $SkipRenderingSettings) {
     Write-Host "  settings:  $list" -ForegroundColor DarkGray
 }
 
+# F4 syntax colors: point FarColorer's TrueMod color style at the family's
+# scheme. See docs/06-colorer-schemes.md.
+$pluginSettings = @()
+$colorerApplied = $false
+if (-not $SkipColorer -and $chosen.ColorerScheme) {
+    switch (Test-ColorerScheme -FarRoot $root -Scheme $chosen.ColorerScheme) {
+        'Ready' {
+            $pluginSettings = @(@{
+                Guid        = $ColorerGuid
+                Description = 'FarColorer'
+                Values      = @(
+                    @{ Name = 'TrueMod';   Type = 'qword'; Value = 1 },
+                    @{ Name = 'HrdNameTm'; Type = 'text';  Value = $chosen.ColorerScheme }
+                )
+            })
+            $colorerApplied = $true
+            Write-Host "  colorer:   TrueMod=1, HrdNameTm=$($chosen.ColorerScheme)" -ForegroundColor DarkGray
+        }
+        'NotRegistered' {
+            Write-Host "  (warning: FarColorer scheme '$($chosen.ColorerScheme)' isn't installed — run" -ForegroundColor Yellow
+            Write-Host "   Install-AllThemes.ps1 first; F4 syntax colors left as is)" -ForegroundColor Yellow
+        }
+        'NotInstalled' {
+            Write-Host '  colorer:   FarColorer not found — skipped' -ForegroundColor DarkGray
+        }
+    }
+}
+
 $combined = $null
 try {
-    $combined = New-CombinedFarconfig -InterfacePath $chosen.InterfacePath -HighlightPath $chosen.HighlightPath -Settings $settings
-    $p = Start-Process $farExe -ArgumentList '-import', "`"$combined`"" -PassThru -Wait -NoNewWindow
+    $combined = New-CombinedFarconfig -InterfacePath $chosen.InterfacePath -HighlightPath $chosen.HighlightPath -Settings $settings -PluginSettings $pluginSettings
+    $farArgs = @('-import', "`"$combined`"")
+    if ($ProfilePath) { $farArgs += "`"$ProfilePath`"" }
+    $p = Start-Process $farExe -ArgumentList $farArgs -PassThru -Wait -NoNewWindow
     if ($p.ExitCode -ne 0) {
         throw "Far import exited with code $($p.ExitCode)."
     }
@@ -299,7 +413,8 @@ finally {
 }
 
 Write-Host ''
-Write-Host "Done — palette and file highlighting applied for $($chosen.Name)." -ForegroundColor Green
+$what = if ($colorerApplied) { 'palette, file highlighting and F4 syntax colors' } else { 'palette and file highlighting' }
+Write-Host "Done — $what applied for $($chosen.Name)." -ForegroundColor Green
 if ($SkipRenderingSettings) {
     Write-Host 'Rendering settings left as is. If colors look approximated to 16 palette entries,' -ForegroundColor Yellow
     Write-Host 'enable truecolor: Far -> Options -> Interface settings -> Use Virtual Terminal for rendering.' -ForegroundColor Yellow
